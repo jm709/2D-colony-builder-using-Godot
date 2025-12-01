@@ -3,3 +3,4 @@ extends Object
 
 var name: String = "None"
 var speed: float = 200.0
+var taskSpeed: int = 1.0

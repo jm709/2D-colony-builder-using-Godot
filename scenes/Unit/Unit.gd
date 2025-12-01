@@ -10,6 +10,9 @@ signal unitSelected(obj)
 
 var data: UnitData = UnitData.new()
 
+var currentTask = null
+var taskPos
+
 var path: Array[Vector2]
 var pos: Vector2 : 
 	get:
@@ -20,10 +23,32 @@ var pos: Vector2 :
 func _ready():
 	pos = grid.worldToGrid(position)
 	unitSelected.connect(gui.setSelectedObject)
+	
+var task_interval := data.taskSpeed
+var time_elapsed := 0.0
 
 func _process(delta):
+	time_elapsed += delta
 	move(delta)
+	if time_elapsed >= task_interval:
+		time_elapsed = 0.0
+		doTask()
 	
+func doTask():
+	if currentTask == null:
+		getTask()
+	else:
+		if currentTask == "Chop":
+			var distance = (abs(taskPos - pos))
+			if distance == Vector2(0,1) || distance == Vector2(1,0):
+				grid.grid[taskPos].building.durability -= 20
+				if (grid.grid[taskPos].building.durability <= 0):
+					var item = grid.grid[taskPos].building.drops[0].item
+					grid.updateTile(taskPos, item)
+					currentTask = null
+			
+func getTask():
+	pass
 func move(delta):
 	if path.size() > 0:
 		if position.distance_to(grid.gridToWorld(path[0])) < 5:
@@ -34,22 +59,25 @@ func move(delta):
 			pos = grid.worldToGrid(position)
 			position += (grid.gridToWorld(path[0]) - position).normalized() * data.speed * delta
 			
-func _unhandled_input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and gui.getSelectedObject() == self:
-		if event.pressed:
-			var clicked = grid.worldToGrid(get_global_mouse_position())
-			for x in pf.getPath(pos, clicked):
-				path.append(grid.worldToGrid(x))
 
 @warning_ignore("native_method_override")
 func get_class():
 	return "Unit"
 	
+func set_task(task_, taskpos_):
+	currentTask = task_
+	taskPos = taskpos_
+	for x in pf.getPartialPath(pos, taskPos):
+		path.append(grid.worldToGrid(x))
+
+func movin(thepos):
+	for x in pf.getPath(pos, thepos):
+		path.append(grid.worldToGrid(x))
+
 func set_job():
 	pass
 	
-
-func _on_input_event(viewport, event, shape_idx):
+func _on_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed() and gui.getSelectedObject() != self:
 		emit_signal("unitSelected", self)
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed() and gui.getSelectedObject() == self:

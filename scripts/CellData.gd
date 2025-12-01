@@ -16,12 +16,12 @@ var floorData: FloorData :
 	get:
 		return floorData
 
-var buildingData : BuildingData :
+var building :
 	set(value):
-		buildingData = value
+		building = value
 		emit_signal("cellChanged", pos)
 	get:
-		return buildingData
+		return building
 
 var occupier = null :
 	set(value):

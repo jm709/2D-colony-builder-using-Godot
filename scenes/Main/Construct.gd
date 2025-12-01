@@ -12,10 +12,7 @@ var pos: Vector2 :
 		return pos
 	set(value):
 		pos = value
-
-func _ready():
-	pos = grid.worldToGrid(position)
-
+	
 var selectedConstruct = null:
 	get:
 		return selectedConstruct
@@ -40,14 +37,14 @@ func _on_stone_wall_pressed() -> void:
 
 
 func _on_dirt_floor_pressed() -> void:
-	pass # Replace with function body.
+	selectedConstruct = load("res://data/growables/tree.tres") 
 
 func _on_back_pressed() -> void:
 	selectedConstruct = null
 
 func _on_construct_input(event):
 	if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
-		emit_signal("unitSelected", null)	
+		emit_signal("unitSelected", null)
 
 func _gui_input(event) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:

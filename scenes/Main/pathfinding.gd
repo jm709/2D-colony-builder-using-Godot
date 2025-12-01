@@ -15,6 +15,11 @@ func getPath(_pointA: Vector2, _pointB: Vector2):
 	var aID = getPointID(_pointA)
 	var bID = getPointID(_pointB)
 	return aStar.get_point_path(aID, bID)
+	
+func getPartialPath(_pointA: Vector2, _pointB: Vector2):
+	var aID = getPointID(_pointA)
+	var bID = getPointID(_pointB)
+	return aStar.get_point_path(aID, bID, true)
 
 func addPoints():
 	var curID = 0
@@ -43,7 +48,7 @@ func disconnectPoint(_point: Vector2):
 
 func getPointID(gridPoint: Vector2) -> int:
 	return aStar.get_closest_point(grid.gridToWorld(gridPoint))
-	
+
 func getWorldID(worldPoint: Vector2) -> int:
 	return aStar.get_closest_point(worldPoint)
 	

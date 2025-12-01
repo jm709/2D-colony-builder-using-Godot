@@ -14,8 +14,8 @@ func generateGrid():
 		for y in height:
 			grid[Vector2(x,y)] = CellData.new(Vector2(x,y))
 			grid[Vector2(x,y)].floorData = preload("res://data/floor/grass.tres")
-			grid[Vector2(x,y)].buildingData = null
-			#grid[Vector2(x,y)].buildingData = preload("res://data/building/tree.tres")
+			grid[Vector2(x,y)].building = null
+
 			refreshTile(Vector2(x,y))
 			if show_debug:
 				var rect = ReferenceRect.new()
@@ -33,18 +33,27 @@ func gridToWorld(_pos: Vector2) -> Vector2:
 	
 func worldToGrid(_pos: Vector2) -> Vector2:
 	return floor(_pos / cell_size)
-
+	
+func getTileFromGrid(_pos: Vector2):
+	return grid[Vector2(_pos.x,_pos.y)]
+	
 func updateTile(_pos: Vector2, _object) -> void:
-	grid[Vector2(_pos.x,_pos.y)].buildingData = _object
-	grid[Vector2(_pos.x,_pos.y)].naviagable = false
+	grid[Vector2(_pos.x,_pos.y)].building = _object
+	grid[Vector2(_pos.x,_pos.y)].naviagable = _object.naviagable
 	refreshTile(_pos)
 
 func refreshTile(_pos: Vector2) -> void:
 	var data = grid[_pos]
 	set_cell(0, _pos, data.floorData.id, data.floorData.coords)
-	if data.buildingData == null:
+	if data.building == null :
 		set_cell(1, _pos)
-	else:
-		set_cell(1, _pos, data.buildingData.id, data.buildingData.coords)
+		if data.naviagable == false:
+			data.naviagable = true
+			path.connectPoint(_pos)
+	elif data.building != null:
+		set_cell(1, _pos, data.building.id, data.building.coords)
+		if data.naviagable == true:
+			path.connectPoint(_pos)
 	if data.naviagable == false:
 		path.disconnectPoint(_pos)
+	
