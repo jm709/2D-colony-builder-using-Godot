@@ -38,6 +38,15 @@ func _on_stone_wall_pressed() -> void:
 
 func _on_dirt_floor_pressed() -> void:
 	selectedConstruct = load("res://data/growables/tree.tres") 
+	
+func _on_lumberjack_pressed() -> void:
+	selectedConstruct = load("res://data/building/production/lumberjack.tres") 
+
+func _on_little_storage_pressed() -> void:
+	selectedConstruct = load("res://data/building/production/littlestorage.tres") 
+
+func _on_little_house_pressed() -> void:
+	selectedConstruct = load("res://data/building/housing/littlehouse.tres") 
 
 func _on_back_pressed() -> void:
 	selectedConstruct = null
@@ -59,3 +68,25 @@ func _unhandled_input(event: InputEvent) -> void:
 			var clicked = grid.worldToGrid(grid.get_global_mouse_position())
 			grid.updateTile(clicked, selectedConstruct)
 			
+
+func _on_back_2_pressed() -> void:
+	selectedConstruct = null
+	$ConstructBase.visible = true
+	$HouseButtons.visible = false
+	$ProductionButtons.visible = false
+	$WallButtons.visible = false
+
+
+func _on_walls_pressed() -> void:
+	$ConstructBase.visible = false
+	$WallButtons.visible = true
+
+
+func _on_housing_pressed() -> void:
+	$ConstructBase.visible = false
+	$HouseButtons.visible = true
+
+
+func _on_production_pressed() -> void:
+	$ConstructBase.visible = false
+	$ProductionButtons.visible = true

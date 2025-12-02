@@ -81,7 +81,7 @@ func getSelectedObject():
 func _on_construct_pressed():
 	selectedObject = null
 	$BaseButtons.visible = false
-	$ConstructButtons.visible = true
+	$ConstructButtons/ConstructBase.visible = true
 	
 func _on_tasks_pressed() -> void:
 	selectedObject = null
@@ -90,7 +90,7 @@ func _on_tasks_pressed() -> void:
 	
 func _on_back_pressed():
 	selectedObject = null
-	$ConstructButtons.visible = false
+	$ConstructButtons/ConstructBase.visible = false
 	$TaskButtons.visible = false
 	$BaseButtons.visible = true 
 	

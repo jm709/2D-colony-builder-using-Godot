@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BuildingData" load_steps=5 format=3 uid="uid://cw874rxf7k7fk"]
+
+[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/DropData.gd" id="1_l2vdv"]
+[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/BuildReqData.gd" id="2_xfl78"]
+[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/BuildingData.gd" id="3_dat0v"]
+[ext_resource type="Texture2D" uid="uid://71bngiyqg4ew" path="res://art/buildings/storage.png" id="4_xfl78"]
+
+[resource]
+script = ExtResource("3_dat0v")
+id = 10
+name = "little storage"
+texture = ExtResource("4_xfl78")
+metadata/_custom_type_script = "uid://cnvtrm34jlpy3"
