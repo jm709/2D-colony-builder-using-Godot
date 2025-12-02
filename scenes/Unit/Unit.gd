@@ -38,14 +38,17 @@ func doTask():
 	if currentTask == null:
 		getTask()
 	else:
-		if currentTask == "Chop":
+		if currentTask == "Chop" || "Mine":
 			var distance = (abs(taskPos - pos))
 			if distance == Vector2(0,1) || distance == Vector2(1,0):
-				grid.grid[taskPos].building.durability -= 20
-				if (grid.grid[taskPos].building.durability <= 0):
-					var item = grid.grid[taskPos].building.drops[0].item
-					grid.updateTile(taskPos, item)
-					currentTask = null
+				breakbuilding()
+					
+func breakbuilding():
+	grid.grid[taskPos].building.durability -= 20
+	if (grid.grid[taskPos].building.durability <= 0):
+		var item = grid.grid[taskPos].building.drops[0].item
+		grid.updateTile(taskPos, item)
+		currentTask = null
 			
 func getTask():
 	pass

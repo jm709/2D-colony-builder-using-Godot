@@ -7,6 +7,13 @@ extends TileMap
 
 var grid: Dictionary = {}
 @onready var path : Pathfinder = get_node("Pathfinding")
+@onready var main = get_tree().root.get_node("Main")
+@onready var gui = main.get_node("CanvasLayer").get_node("GUI")
+signal unitSelected(obj)
+
+func _ready():
+	unitSelected.connect(gui.setSelectedObject)
+
 
 @export var show_debug: bool = false
 func generateGrid():
@@ -56,4 +63,4 @@ func refreshTile(_pos: Vector2) -> void:
 			path.connectPoint(_pos)
 	if data.naviagable == false:
 		path.disconnectPoint(_pos)
-	
+		

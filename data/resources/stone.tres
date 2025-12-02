@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://b6pmacwar1oxp"]
+
+[ext_resource type="Script" uid="uid://c3i6638bf78r5" path="res://scripts/ItemData.gd" id="1_nqij1"]
+[ext_resource type="Texture2D" uid="uid://cv2u8n3wuy7bs" path="res://art/items/stone.png" id="2_yjvks"]
+
+[resource]
+script = ExtResource("1_nqij1")
+id = 7
+texture = ExtResource("2_yjvks")
+maxStack = 99
+metadata/_custom_type_script = "uid://c3i6638bf78r5"

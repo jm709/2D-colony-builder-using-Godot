@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://b5npiekbsl1a3"]
+[gd_scene load_steps=26 format=3 uid="uid://b5npiekbsl1a3"]
 
 [ext_resource type="Script" uid="uid://k4fhtwc2tv2p" path="res://scenes/Main/main.gd" id="1_px18m"]
 [ext_resource type="Script" uid="uid://coat0elfombhf" path="res://scripts/Grid.gd" id="2_8gcrf"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://hi2l4ikeppdr" path="res://art/tree.png" id="6_yye4h"]
 [ext_resource type="Texture2D" uid="uid://clg5xyqu770wx" path="res://art/woodwall.png" id="7_v04fw"]
 [ext_resource type="Texture2D" uid="uid://6tqi42rod2su" path="res://art/wood.png" id="8_yye4h"]
+[ext_resource type="Texture2D" uid="uid://cv2u8n3wuy7bs" path="res://art/items/stone.png" id="9_v04fw"]
 [ext_resource type="Script" uid="uid://dgnapodiyl04i" path="res://scenes/Main/gui.gd" id="12_3348s"]
 [ext_resource type="Script" uid="uid://bqj6a22gdrf43" path="res://scenes/Main/Construct.gd" id="13_f0cp1"]
 [ext_resource type="Script" uid="uid://cdfhp30vrkny5" path="res://scenes/Main/rClickPanel.gd" id="14_qavmp"]
@@ -57,6 +58,11 @@ texture = ExtResource("8_yye4h")
 texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2ep58"]
+texture = ExtResource("9_v04fw")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_2ep58"]
 tile_size = Vector2i(128, 128)
 sources/0 = SubResource("TileSetAtlasSource_52res")
@@ -66,6 +72,7 @@ sources/3 = SubResource("TileSetAtlasSource_mysde")
 sources/4 = SubResource("TileSetAtlasSource_r08jt")
 sources/5 = SubResource("TileSetAtlasSource_s0h5q")
 sources/6 = SubResource("TileSetAtlasSource_v04fw")
+sources/7 = SubResource("TileSetAtlasSource_2ep58")
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_px18m")
@@ -105,6 +112,7 @@ mouse_filter = 1
 script = ExtResource("12_3348s")
 
 [node name="BaseButtons" type="Control" parent="CanvasLayer/GUI"]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -148,7 +156,6 @@ size_flags_horizontal = 3
 text = "Bio"
 
 [node name="ConstructButtons" type="Control" parent="CanvasLayer/GUI"]
-visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -170,15 +177,27 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Back"
 
-[node name="WoodWall" type="Button" parent="CanvasLayer/GUI/ConstructButtons/HBoxContainer"]
+[node name="Walls" type="Button" parent="CanvasLayer/GUI/ConstructButtons/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+text = "Walls
+"
+
+[node name="WoodWall" type="Button" parent="CanvasLayer/GUI/ConstructButtons/HBoxContainer/Walls"]
+visible = false
+layout_mode = 0
+offset_right = 91.0
+offset_bottom = 31.0
 size_flags_horizontal = 3
 text = "Wood Wall"
 icon = ExtResource("7_v04fw")
 expand_icon = true
 
-[node name="StoneWall" type="Button" parent="CanvasLayer/GUI/ConstructButtons/HBoxContainer"]
-layout_mode = 2
+[node name="StoneWall" type="Button" parent="CanvasLayer/GUI/ConstructButtons/HBoxContainer/Walls"]
+visible = false
+layout_mode = 0
+offset_right = 90.0
+offset_bottom = 31.0
 size_flags_horizontal = 3
 text = "Stone Wall"
 icon = ExtResource("5_qavmp")
@@ -187,8 +206,8 @@ expand_icon = true
 [node name="DirtFloor" type="Button" parent="CanvasLayer/GUI/ConstructButtons/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Dirt"
-icon = ExtResource("2_8x5ba")
+text = "Tree"
+icon = ExtResource("6_yye4h")
 expand_icon = true
 
 [node name="TaskButtons" type="Control" parent="CanvasLayer/GUI"]
@@ -297,8 +316,8 @@ text = "Haul"
 [connection signal="pressed" from="CanvasLayer/GUI/BaseButtons/HBoxContainer/Tasks" to="CanvasLayer/GUI" method="_on_tasks_pressed"]
 [connection signal="pressed" from="CanvasLayer/GUI/ConstructButtons/HBoxContainer/Back" to="CanvasLayer/GUI" method="_on_back_pressed"]
 [connection signal="pressed" from="CanvasLayer/GUI/ConstructButtons/HBoxContainer/Back" to="CanvasLayer/GUI/ConstructButtons" method="_on_back_pressed"]
-[connection signal="pressed" from="CanvasLayer/GUI/ConstructButtons/HBoxContainer/WoodWall" to="CanvasLayer/GUI/ConstructButtons" method="_on_wood_wall_pressed"]
-[connection signal="pressed" from="CanvasLayer/GUI/ConstructButtons/HBoxContainer/StoneWall" to="CanvasLayer/GUI/ConstructButtons" method="_on_stone_wall_pressed"]
+[connection signal="pressed" from="CanvasLayer/GUI/ConstructButtons/HBoxContainer/Walls/WoodWall" to="CanvasLayer/GUI/ConstructButtons" method="_on_wood_wall_pressed"]
+[connection signal="pressed" from="CanvasLayer/GUI/ConstructButtons/HBoxContainer/Walls/StoneWall" to="CanvasLayer/GUI/ConstructButtons" method="_on_stone_wall_pressed"]
 [connection signal="pressed" from="CanvasLayer/GUI/ConstructButtons/HBoxContainer/DirtFloor" to="CanvasLayer/GUI/ConstructButtons" method="_on_dirt_floor_pressed"]
 [connection signal="pressed" from="CanvasLayer/GUI/TaskButtons/HBoxContainer/Back" to="CanvasLayer/GUI" method="_on_back_pressed"]
 [connection signal="pressed" from="CanvasLayer/GUI/RClickPanel/VBoxContainer/Move" to="CanvasLayer/GUI" method="_on_move_pressed"]

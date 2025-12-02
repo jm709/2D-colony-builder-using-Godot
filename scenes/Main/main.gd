@@ -13,3 +13,9 @@ func _unhandled_input(event: InputEvent):
 			var clicked = grid.worldToGrid(grid.get_global_mouse_position())
 			var tile = grid.getTileFromGrid(clicked)
 			gui.setRClickedObject(tile)
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			var clicked = grid.worldToGrid(grid.get_global_mouse_position())
+			var tile = grid.getTileFromGrid(clicked)
+			gui.setSelectedObject(tile)
+			

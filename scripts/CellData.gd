@@ -36,3 +36,7 @@ var naviagable: bool = true :
 		emit_signal("navChanged", pos)
 	get:
 		return naviagable
+		
+@warning_ignore("native_method_override")
+func get_class():
+	return "Cell"

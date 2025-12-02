@@ -19,6 +19,18 @@ var selectedObject = null:
 				"Unit":
 					$InfoPanel/Name.text = value.data.name
 					$BaseButtons/HBoxContainer/Bio.visible = true
+				"Cell":
+					if value.building != null:
+						match value.building.get_class():
+							"Building":
+								$InfoPanel/Name.text = value.building.name
+								$BaseButtons/HBoxContainer/Bio.visible = true
+					else:
+						match value.floorData.get_class():
+							"Floor":
+								$InfoPanel/Name.text = value.floorData.name
+								$BaseButtons/HBoxContainer/Bio.visible = true
+							
 		else:
 			$InfoPanel.visible = false
 			$BaseButtons/HBoxContainer/Bio.visible = false
@@ -28,13 +40,12 @@ var rclickedObject = null:
 		return rclickedObject
 	set(value):
 		resetRClickPanel()
-		if selectedObject != null:
+		if selectedObject.get_class() == "Unit":
 			rclickedObject = value
 			if value != null:
 				$RClickPanel.visible = true
 				$RClickPanel.set_position(get_global_mouse_position())
 				taskpos = grid.worldToGrid(grid.get_global_mouse_position())
-				print(taskpos)
 				if (rclickedObject.building != null):
 					match rclickedObject.building.get_class():
 						"Building":
