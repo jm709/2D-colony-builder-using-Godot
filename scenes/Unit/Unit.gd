@@ -24,7 +24,7 @@ func _ready():
 	pos = grid.worldToGrid(position)
 	unitSelected.connect(gui.setSelectedObject)
 	
-var task_interval := data.taskSpeed
+var task_interval := data.taskSpeed / 50
 var time_elapsed := 0.0
 
 func _process(delta):
@@ -38,18 +38,38 @@ func doTask():
 	if currentTask == null:
 		getTask()
 	else:
-		if currentTask == "Chop" || "Mine":
+		print(currentTask)
+		if currentTask == "Chop" || currentTask == "Mine":
 			var distance = (abs(taskPos - pos))
 			if distance == Vector2(0,1) || distance == Vector2(1,0):
 				breakbuilding()
+		elif currentTask == "Haul":
+			var distance = (abs(taskPos - pos))
+			if distance == Vector2(0,0):
+				pickUp(taskPos)
+
 					
 func breakbuilding():
 	grid.grid[taskPos].building.durability -= 20
 	if (grid.grid[taskPos].building.durability <= 0):
-		var item = grid.grid[taskPos].building.drops[0].item
-		grid.updateTile(taskPos, item)
+		var data_ = grid.grid[taskPos].building.drops[0]
+		var drop : DropData = DropData.new(data_.item, data_.amount)
+		grid.updateTile(taskPos, drop)
 		currentTask = null
-			
+
+func pickUp(_pos):
+	if (data.hauling.size() == 0):
+		var item = grid.grid[_pos].building
+		data.hauling.append(item)
+		grid.itemOverlay.set_stack(_pos, 0, grid.gridToWorld(_pos))
+		grid.grid[_pos].building = null
+		grid.refreshTile(_pos)
+		
+		currentTask = "Store"
+
+func store(_pos):
+	pass
+
 func getTask():
 	pass
 func move(delta):
@@ -74,6 +94,8 @@ func set_task(task_, taskpos_):
 		path.append(grid.worldToGrid(x))
 
 func movin(thepos):
+	currentTask = null
+	taskPos = null
 	for x in pf.getPath(pos, thepos):
 		path.append(grid.worldToGrid(x))
 

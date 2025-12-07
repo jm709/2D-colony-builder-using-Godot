@@ -19,16 +19,38 @@ var selectedObject = null:
 				"Unit":
 					$InfoPanel/Name.text = value.data.name
 					$BaseButtons/HBoxContainer/Bio.visible = true
+					if (value.data.hauling.size() != 0):
+						$InfoPanel/haulAmount.text = str(value.data.hauling[0].amount)
+						$InfoPanel/haulIcon.texture = value.data.hauling[0].item.texture
 				"Cell":
 					if value.building != null:
 						match value.building.get_class():
 							"Building":
 								$InfoPanel/Name.text = value.building.name
 								$BaseButtons/HBoxContainer/Bio.visible = true
+							"Plant":
+								$InfoPanel/Name.text = value.building.name
+								var dline = ("Durablity: %d / %d" % [value.building.durability, value.building.maxDurability])
+								$InfoPanel/Durability.text = dline
+							"Production":
+								$InfoPanel/Name.text = value.building.name
+								var dline = ("Durablity: %d / %d" % [value.building.durability, value.building.maxDurability])
+								$InfoPanel/Durability.text = dline
+							"Storage":
+								$InfoPanel/Name.text = value.building.name
+								var lines := []
+								for item in value.building.stores:
+									var item_name = item.item.name
+									lines.append("%s: %d / %d" % [item_name, item.CurrentAmount, item.TotalAmount])
+								$InfoPanel/Stores.text = "\n".join(lines)
+								var dline = ("Durablity: %d / %d" % [value.building.durability, value.building.maxDurability])
+								$InfoPanel/Durability.text = dline
 					else:
 						match value.floorData.get_class():
 							"Floor":
 								$InfoPanel/Name.text = value.floorData.name
+								$InfoPanel/haulAmount.text = ""
+								$InfoPanel/haulIcon.texture = null
 								$BaseButtons/HBoxContainer/Bio.visible = true
 							
 		else:
@@ -40,26 +62,27 @@ var rclickedObject = null:
 		return rclickedObject
 	set(value):
 		resetRClickPanel()
-		if selectedObject.get_class() == "Unit":
-			rclickedObject = value
-			if value != null:
-				$RClickPanel.visible = true
-				$RClickPanel.set_position(get_global_mouse_position())
-				taskpos = grid.worldToGrid(grid.get_global_mouse_position())
-				if (rclickedObject.building != null):
-					match rclickedObject.building.get_class():
-						"Building":
-							$RClickPanel/VBoxContainer/Mine.visible = true
-						"Plant":
-							$RClickPanel/VBoxContainer/Chop.visible = true
-						"Item":
-							$RClickPanel/VBoxContainer/Haul.visible = true
-							$RClickPanel/VBoxContainer/Move.visible = true
-
-				else:
-					match rclickedObject.floorData.get_class():
-						"Floor":
-							$RClickPanel/VBoxContainer/Move.visible = true
+		if selectedObject:
+			if selectedObject.get_class() == "Unit":
+				rclickedObject = value
+				if value != null:
+					$RClickPanel.visible = true
+					$RClickPanel.set_position(get_global_mouse_position())
+					taskpos = grid.worldToGrid(grid.get_global_mouse_position())
+					if (rclickedObject.building != null):
+						print(rclickedObject.building.get_class())
+						match rclickedObject.building.get_class():
+							"Building":
+								$RClickPanel/VBoxContainer/Mine.visible = true
+							"Plant":
+								$RClickPanel/VBoxContainer/Chop.visible = true
+							"Item":
+								$RClickPanel/VBoxContainer/Haul.visible = true
+								$RClickPanel/VBoxContainer/Move.visible = true
+					else:
+						match rclickedObject.floorData.get_class():
+							"Floor":
+								$RClickPanel/VBoxContainer/Move.visible = true
 						
 func resetRClickPanel():
 	taskpos = null
@@ -113,4 +136,6 @@ func _on_harvest_pressed() -> void:
 	pass # Replace with function body.
 
 func _on_haul_pressed() -> void:
-	pass # Replace with function body.
+	print("haulin")
+	unit.set_task("Haul", taskpos)
+	resetRClickPanel()

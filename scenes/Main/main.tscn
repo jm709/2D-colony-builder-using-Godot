@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://b5npiekbsl1a3"]
+[gd_scene load_steps=33 format=3 uid="uid://b5npiekbsl1a3"]
 
 [ext_resource type="Script" uid="uid://k4fhtwc2tv2p" path="res://scenes/Main/main.gd" id="1_px18m"]
 [ext_resource type="Script" uid="uid://coat0elfombhf" path="res://scripts/Grid.gd" id="2_8gcrf"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://vuingj0a06pd" path="res://art/buildings/Lumberjack.png" id="12_r08jt"]
 [ext_resource type="Script" uid="uid://bqj6a22gdrf43" path="res://scenes/Main/Construct.gd" id="13_f0cp1"]
 [ext_resource type="Script" uid="uid://cdfhp30vrkny5" path="res://scenes/Main/rClickPanel.gd" id="14_qavmp"]
+[ext_resource type="Script" uid="uid://ckinwv4tl1vjs" path="res://scenes/Main/ItemOverlay.gd" id="16_mysde"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_52res"]
 resource_name = "dirt"
@@ -115,6 +116,9 @@ show_debug = true
 
 [node name="Pathfinding" type="Node" parent="Grid"]
 script = ExtResource("4_rdp1x")
+
+[node name="ItemOverlay" type="Node2D" parent="Grid"]
+script = ExtResource("16_mysde")
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(175, 47)
@@ -382,6 +386,35 @@ offset_left = 2.0
 offset_top = 76.0
 offset_right = 42.0
 offset_bottom = 99.0
+
+[node name="Stores" type="Label" parent="CanvasLayer/GUI/InfoPanel"]
+layout_mode = 0
+offset_left = 167.0
+offset_top = 77.0
+offset_right = 314.0
+offset_bottom = 198.0
+
+[node name="Durability" type="Label" parent="CanvasLayer/GUI/InfoPanel"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 178.0
+offset_right = 86.0
+offset_bottom = 201.0
+
+[node name="haulAmount" type="Label" parent="CanvasLayer/GUI/InfoPanel"]
+layout_mode = 0
+offset_left = 287.0
+offset_top = 174.0
+offset_right = 313.0
+offset_bottom = 197.0
+
+[node name="haulIcon" type="TextureRect" parent="CanvasLayer/GUI/InfoPanel"]
+layout_mode = 0
+offset_left = 226.7451
+offset_top = 116.0
+offset_right = 313.0
+offset_bottom = 199.0
+expand_mode = 1
 
 [node name="RClickPanel" type="Control" parent="CanvasLayer/GUI"]
 anchors_preset = 0

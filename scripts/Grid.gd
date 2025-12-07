@@ -9,6 +9,10 @@ var grid: Dictionary = {}
 @onready var path : Pathfinder = get_node("Pathfinding")
 @onready var main = get_tree().root.get_node("Main")
 @onready var gui = main.get_node("CanvasLayer").get_node("GUI")
+@onready var itemOverlay = get_node("ItemOverlay")
+
+@onready var findX : Dictionary = {}
+
 signal unitSelected(obj)
 
 func _ready():
@@ -22,7 +26,6 @@ func generateGrid():
 			grid[Vector2(x,y)] = CellData.new(Vector2(x,y))
 			grid[Vector2(x,y)].floorData = preload("res://data/floor/grass.tres")
 			grid[Vector2(x,y)].building = null
-
 			refreshTile(Vector2(x,y))
 			if show_debug:
 				var rect = ReferenceRect.new()
@@ -45,9 +48,16 @@ func getTileFromGrid(_pos: Vector2):
 	return grid[Vector2(_pos.x,_pos.y)]
 	
 func updateTile(_pos: Vector2, _object) -> void:
-	grid[Vector2(_pos.x,_pos.y)].building = _object
-	grid[Vector2(_pos.x,_pos.y)].naviagable = _object.naviagable
+	if (_object.get_class() == "Item"):
+		grid[Vector2(_pos.x,_pos.y)].building = _object
+		grid[Vector2(_pos.x,_pos.y)].naviagable = _object.item.naviagable
+		itemOverlay.set_stack(_pos, _object.amount, gridToWorld(_pos))
+	else:
+		grid[Vector2(_pos.x,_pos.y)].building = _object
+		grid[Vector2(_pos.x,_pos.y)].naviagable = _object.naviagable
+	addFindable(_pos, _object.get_class())
 	refreshTile(_pos)
+	
 
 func refreshTile(_pos: Vector2) -> void:
 	var data = grid[_pos]
@@ -64,3 +74,9 @@ func refreshTile(_pos: Vector2) -> void:
 	if data.naviagable == false:
 		path.disconnectPoint(_pos)
 		
+func addFindable(_pos: Vector2, thing):
+	if (str(thing) in findX):
+		findX[str(thing)].append(_pos)
+	else:
+		findX[str(thing)] = [_pos]
+	print(findX[str(thing)])

@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="BuildingData" load_steps=5 format=3 uid="uid://bwpcmpcf8nono"]
 
-[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/DropData.gd" id="1_t0gbc"]
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/BuildReqData.gd" id="2_6xr7w"]
-[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/BuildingData.gd" id="3_bj8ta"]
+[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/CellScripts/DropData.gd" id="1_t0gbc"]
+[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="2_6xr7w"]
+[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/CellScripts/BuildingScripts/BuildingData.gd" id="3_bj8ta"]
 [ext_resource type="Texture2D" uid="uid://bh3h4p3nvkq1q" path="res://art/buildings/lil hoose.png" id="4_6xr7w"]
 
 [resource]

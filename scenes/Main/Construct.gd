@@ -31,10 +31,8 @@ var selectedConstruct = null:
 func _on_wood_wall_pressed() -> void:
 	selectedConstruct = load("res://data/building/woodenwall.tres")
 
-
 func _on_stone_wall_pressed() -> void:
 	selectedConstruct = load("res://data/building/stonewall.tres")
-
 
 func _on_dirt_floor_pressed() -> void:
 	selectedConstruct = load("res://data/growables/tree.tres") 
@@ -66,7 +64,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and selectedConstruct != null:
 		if event.pressed:
 			var clicked = grid.worldToGrid(grid.get_global_mouse_position())
-			grid.updateTile(clicked, selectedConstruct)
+			var inst = selectedConstruct.duplicate(true)
+			grid.updateTile(clicked, inst)
 			
 
 func _on_back_2_pressed() -> void:

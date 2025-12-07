@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="BuildingData" load_steps=5 format=3 uid="uid://bj7e0bj6lixqa"]
 
-[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/DropData.gd" id="1_575w2"]
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/BuildReqData.gd" id="2_pmory"]
-[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/BuildingData.gd" id="3_l6uig"]
+[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/CellScripts/DropData.gd" id="1_575w2"]
+[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="2_pmory"]
+[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/CellScripts/BuildingScripts/BuildingData.gd" id="3_l6uig"]
 [ext_resource type="Texture2D" uid="uid://vuingj0a06pd" path="res://art/buildings/Lumberjack.png" id="4_pmory"]
 
 [resource]

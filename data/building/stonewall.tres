@@ -1,9 +1,9 @@
-[gd_resource type="Resource" script_class="BuildingData" load_steps=8 format=3 uid="uid://cfwotwpemiqan"]
+[gd_resource type="Resource" script_class="BuildingData" load_steps=7 format=3 uid="uid://cfwotwpemiqan"]
 
-[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/DropData.gd" id="1_galyt"]
+[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/CellScripts/DropData.gd" id="1_galyt"]
 [ext_resource type="Resource" uid="uid://b6pmacwar1oxp" path="res://data/resources/stone.tres" id="2_m4a0i"]
-[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/BuildingData.gd" id="2_p74uv"]
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/BuildReqData.gd" id="3_galyt"]
+[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/CellScripts/BuildingScripts/BuildingData.gd" id="2_p74uv"]
+[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="3_galyt"]
 [ext_resource type="Texture2D" uid="uid://cg5v0omgv2dwr" path="res://art/stonewall.png" id="3_p74uv"]
 
 [sub_resource type="Resource" id="Resource_yqxw1"]
@@ -12,17 +12,10 @@ item = ExtResource("2_m4a0i")
 amount = 2
 metadata/_custom_type_script = "uid://cehcbhws0nbr8"
 
-[sub_resource type="Resource" id="Resource_m4a0i"]
-script = ExtResource("3_galyt")
-item = ExtResource("2_m4a0i")
-amount = 5
-metadata/_custom_type_script = "uid://baxfo8ekf123i"
-
 [resource]
 script = ExtResource("2_p74uv")
 id = 3
 name = "Stone Wall"
 texture = ExtResource("3_p74uv")
 drops = Array[ExtResource("1_galyt")]([SubResource("Resource_yqxw1")])
-recipes = Array[ExtResource("3_galyt")]([SubResource("Resource_m4a0i")])
 metadata/_custom_type_script = "uid://cnvtrm34jlpy3"

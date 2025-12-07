@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://b66t74qfp7bmc"]
 
-[ext_resource type="Script" uid="uid://c3i6638bf78r5" path="res://scripts/ItemData.gd" id="1_wejhl"]
+[ext_resource type="Script" uid="uid://c3i6638bf78r5" path="res://scripts/CellScripts/ItemData.gd" id="1_wejhl"]
 [ext_resource type="Texture2D" uid="uid://beke81lwk7i8i" path="res://art/items/wood.png" id="2_tl7ff"]
 
 [resource]
@@ -8,5 +8,5 @@ script = ExtResource("1_wejhl")
 name = "wood"
 id = 6
 texture = ExtResource("2_tl7ff")
-maxStack = 99
+maxStack = 10
 metadata/_custom_type_script = "uid://c3i6638bf78r5"

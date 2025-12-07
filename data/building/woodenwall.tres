@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="BuildingData" load_steps=5 format=3 uid="uid://cs6ogtbcaye2s"]
 
-[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/DropData.gd" id="1_adib7"]
-[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/BuildingData.gd" id="2_5fdb7"]
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/BuildReqData.gd" id="2_8rxwk"]
+[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/CellScripts/DropData.gd" id="1_adib7"]
+[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/CellScripts/BuildingScripts/BuildingData.gd" id="2_5fdb7"]
+[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="2_8rxwk"]
 [ext_resource type="Texture2D" uid="uid://clg5xyqu770wx" path="res://art/woodwall.png" id="3_5fdb7"]
 
 [resource]

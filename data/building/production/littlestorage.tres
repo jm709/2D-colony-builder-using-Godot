@@ -1,13 +1,28 @@
-[gd_resource type="Resource" script_class="BuildingData" load_steps=5 format=3 uid="uid://cw874rxf7k7fk"]
+[gd_resource type="Resource" script_class="StorageBData" load_steps=9 format=3 uid="uid://cb4yppjrthim3"]
 
-[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/DropData.gd" id="1_l2vdv"]
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/BuildReqData.gd" id="2_xfl78"]
-[ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/BuildingData.gd" id="3_dat0v"]
-[ext_resource type="Texture2D" uid="uid://71bngiyqg4ew" path="res://art/buildings/storage.png" id="4_xfl78"]
+[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/CellScripts/DropData.gd" id="1_gaydf"]
+[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="2_60hf4"]
+[ext_resource type="Script" uid="uid://rehlpwot8mjv" path="res://scripts/CellScripts/BuildingScripts/StorageBData.gd" id="3_aukay"]
+[ext_resource type="Texture2D" uid="uid://71bngiyqg4ew" path="res://art/buildings/storage.png" id="4_60hf4"]
+[ext_resource type="Resource" uid="uid://b66t74qfp7bmc" path="res://data/resources/wood.tres" id="4_rha40"]
+[ext_resource type="Resource" uid="uid://b6pmacwar1oxp" path="res://data/resources/stone.tres" id="5_38tnf"]
+
+[sub_resource type="Resource" id="Resource_yqk0g"]
+script = ExtResource("2_60hf4")
+item = ExtResource("4_rha40")
+TotalAmount = 99
+metadata/_custom_type_script = "uid://baxfo8ekf123i"
+
+[sub_resource type="Resource" id="Resource_3skuf"]
+script = ExtResource("2_60hf4")
+item = ExtResource("5_38tnf")
+TotalAmount = 99
+metadata/_custom_type_script = "uid://baxfo8ekf123i"
 
 [resource]
-script = ExtResource("3_dat0v")
+script = ExtResource("3_aukay")
+stores = Array[ExtResource("2_60hf4")]([SubResource("Resource_yqk0g"), SubResource("Resource_3skuf")])
 id = 10
 name = "little storage"
-texture = ExtResource("4_xfl78")
-metadata/_custom_type_script = "uid://cnvtrm34jlpy3"
+texture = ExtResource("4_60hf4")
+metadata/_custom_type_script = "uid://rehlpwot8mjv"

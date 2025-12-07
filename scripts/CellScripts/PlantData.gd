@@ -6,6 +6,7 @@ extends Resource
 @export var id: int = 0
 @export var coords: Vector2 = Vector2(0,0)
 @export var durability: int = 100
+@export var maxDurability: int = 100
 @export var drops: Array[DropData] = []
 @export var growth: int = 100
 @export var growsOn: Array[FloorData] = []

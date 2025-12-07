@@ -3,7 +3,8 @@ extends Resource
 
 @export var id: int = 0
 @export var name: String
-@export var durability : int = 100
+@export var maxDurability : int = 100
+var durability : int = maxDurability
 @export var texture: Texture
 @export var unbuiltTexture: Texture
 @export var width : int = 1
@@ -12,7 +13,7 @@ extends Resource
 @export var resourcesRequired: Dictionary
 @export var isRestingSpot: bool
 @export var drops: Array[DropData] = []
-@export var recipes: Array[BuildReqs] = []
+@export var buildReq: Array[itemCATA] = []
 @export var coords: Vector2 = Vector2(0,0)
 @export var naviagable: bool = false
 

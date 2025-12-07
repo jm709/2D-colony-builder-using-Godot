@@ -17,5 +17,8 @@ func _unhandled_input(event: InputEvent):
 		if event.pressed:
 			var clicked = grid.worldToGrid(grid.get_global_mouse_position())
 			var tile = grid.getTileFromGrid(clicked)
-			gui.setSelectedObject(tile)
+			if tile == gui.getSelectedObject():
+				gui.setSelectedObject(null)
+			else:
+				gui.setSelectedObject(tile)
 			
