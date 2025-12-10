@@ -5,6 +5,6 @@ var name: String = "None"
 var speed: float = 200.0
 var taskSpeed: float = 1.0
 var maxHaul: int = 10
-var hauling: DropData
+var hauling: itemCATA
 var equiped: int = 0 #temp int
 var skills: int = 0 #temp int

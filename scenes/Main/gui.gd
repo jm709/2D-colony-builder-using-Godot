@@ -20,7 +20,7 @@ var selectedObject = null:
 					$InfoPanel/Name.text = value.data.name
 					$BaseButtons/HBoxContainer/Bio.visible = true
 					if (value.data.hauling != null):
-						$InfoPanel/haulAmount.text = str(value.data.hauling.amount)
+						$InfoPanel/haulAmount.text = str(value.data.hauling.CurrentAmount)
 						$InfoPanel/haulIcon.texture = value.data.hauling.item.texture
 				"Cell":
 					if value.building != null:

@@ -51,13 +51,24 @@ func updateTile(_pos: Vector2, _object) -> void:
 	if (_object.get_class() == "Item"):
 		grid[Vector2(_pos.x,_pos.y)].building = _object
 		grid[Vector2(_pos.x,_pos.y)].naviagable = _object.item.naviagable
-		itemOverlay.set_stack(_pos, _object.amount, gridToWorld(_pos))
+		itemOverlay.set_stack(_pos, _object.CurrentAmount, gridToWorld(_pos))
 	else:
 		grid[Vector2(_pos.x,_pos.y)].building = _object
 		grid[Vector2(_pos.x,_pos.y)].naviagable = _object.naviagable
-	addFindable(_pos, _object.get_class())
+	if (_object.get_class() == "Item"):
+		addFindable(_pos, str(_object.id))
+	else:
+		addFindable(_pos, _object.get_class())
 	refreshTile(_pos)
-	
+
+func removeBuilding(_pos):
+	var rmv = grid[_pos].building.get_class()
+	if (rmv == "Item"):
+		itemOverlay.set_stack(_pos, 0, gridToWorld(_pos))
+		rmv = grid[_pos].building.id
+		
+	rmvFindable(_pos, str(rmv))
+	grid[_pos].building = null
 
 func refreshTile(_pos: Vector2) -> void:
 	var data = grid[_pos]
@@ -82,4 +93,4 @@ func addFindable(_pos: Vector2, thing):
 	print(findX[str(thing)])
 	
 func rmvFindable(_pos: Vector2, thing):
-	findX[str(thing)].remove(_pos)
+	findX[str(thing)].erase(_pos)

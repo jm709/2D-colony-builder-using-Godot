@@ -54,14 +54,14 @@ func storeinv():
 	var storage = grid.grid[taskPos].building.stores
 	for itemcata in storage:
 		if itemcata.item.id == data.hauling.item.id:
-			if (itemcata.CurrentAmount - itemcata.TotalAmount) < data.hauling.amount:
-				itemcata.CurrentAmount += data.hauling.amount
+			if (itemcata.CurrentAmount - itemcata.TotalAmount) < data.hauling.CurrentAmount:
+				itemcata.CurrentAmount += data.hauling.CurrentAmount
 				data.hauling = null
 				break
 			else:
 				var difference = (itemcata.TotalAmount - itemcata.CurrentAmount)
 				itemcata.CurrentAmount = itemcata.TotalAmount
-				data.hauling.amount -= difference
+				data.hauling.CurrentAmount -= difference
 				break
 	currentTask = null
 
@@ -75,47 +75,50 @@ func breakbuilding():
 	grid.grid[taskPos].building.durability -= 20
 	if (grid.grid[taskPos].building.durability <= 0):
 		var data_ = grid.grid[taskPos].building.drops[0]
-		var drop : DropData = DropData.new(data_.item, data_.amount)
+		var drop : itemCATA = itemCATA.new(data_.item, data_.CurrentAmount)
+		grid.removeBuilding(taskPos)
 		grid.updateTile(taskPos, drop)
 		currentTask = null
 
 func pickUp(_pos):
-	if (data.hauling == null):
+	if (data.hauling == null || data.hauling.id == grid.grid[_pos].building.id):
 		var item = grid.grid[_pos].building
-		data.hauling = item
-		grid.itemOverlay.set_stack(_pos, 0, grid.gridToWorld(_pos))
-		grid.grid[_pos].building = null
-		grid.refreshTile(_pos)
-		
-	if (data.hauling != null):
-		var item = grid.grid[_pos].building
-		if data.hauling != item:
-			gotoThing("Storage")
+		if data.hauling == null:
+			data.hauling = item
+			grid.removeBuilding(_pos)
 		else:
-			var left = (data.hauling.item.maxStack - data.hauling.amount)
-			if (item.amount <= left):
-				data.hauling += item.amount
-				grid.itemOverlay.set_stack(_pos, 0, grid.gridToWorld(_pos))
-				grid.grid[_pos].building = null
+			var left = (data.hauling.item.maxStack - data.hauling.CurrentAmount)
+			if (item.CurrentAmount <= left):
+				data.hauling.CurrentAmount += item.CurrentAmount
+				grid.removeBuilding(_pos)
+				
 			else:
-				item.amount = data.hauling.item.maxStack
-				item.amount -= left
-				grid.itemOverlay.set_stack(_pos, item.amount, grid.gridToWorld(_pos))
-
+				data.hauling.CurrentAmount = data.hauling.item.maxStack
+				item.CurrentAmount -= left
+				grid.itemOverlay.set_stack(_pos, item.CurrentAmount, grid.gridToWorld(_pos))
+				
 		grid.refreshTile(_pos)
+		## check if theres more
+		_pos = gotoThing(str(data.hauling.id))
+		if data.hauling.CurrentAmount == data.hauling.item.maxStack || _pos == null:
+			_pos = gotoThing("Storage")
+			set_task("Store", _pos)
+		else:
+			set_task("Haul", _pos)
 
-func gotoThing(thing: String):
-	var closest = Vector2(99,99)
+		
+
+func gotoThing(thing: String, closest = Vector2(99,99)):
 	if grid.findX.has(thing):
 		for pos_ in grid.findX[thing]:
 			print(abs(closest - pos_))
-			print(abs(pos_ - taskPos))
-			if abs(closest - pos_) > abs(pos_ - taskPos):
+			print(abs(pos_ - pos))
+			if abs(closest - pos_) > abs(pos_ - pos):
 				closest = pos_
 	if closest == Vector2(99,99):
-		print("Ain't shit")
+		return null
 	else:
-		set_task("Store", closest)
+		return closest
 		
 		
 func getTask():

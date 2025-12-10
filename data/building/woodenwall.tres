@@ -1,13 +1,21 @@
-[gd_resource type="Resource" script_class="BuildingData" load_steps=5 format=3 uid="uid://cs6ogtbcaye2s"]
+[gd_resource type="Resource" script_class="BuildingData" load_steps=6 format=3 uid="uid://cs6ogtbcaye2s"]
 
-[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/CellScripts/DropData.gd" id="1_adib7"]
 [ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/CellScripts/BuildingScripts/BuildingData.gd" id="2_5fdb7"]
 [ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="2_8rxwk"]
+[ext_resource type="Resource" uid="uid://b66t74qfp7bmc" path="res://data/resources/wood.tres" id="2_adib7"]
 [ext_resource type="Texture2D" uid="uid://clg5xyqu770wx" path="res://art/woodwall.png" id="3_5fdb7"]
+
+[sub_resource type="Resource" id="Resource_8rxwk"]
+script = ExtResource("2_8rxwk")
+item = ExtResource("2_adib7")
+TotalAmount = 10
+CurrentAmount = 3
+metadata/_custom_type_script = "uid://baxfo8ekf123i"
 
 [resource]
 script = ExtResource("2_5fdb7")
 id = 5
 name = "Wood wall"
 texture = ExtResource("3_5fdb7")
+drops = Array[ExtResource("2_8rxwk")]([SubResource("Resource_8rxwk")])
 metadata/_custom_type_script = "uid://cnvtrm34jlpy3"

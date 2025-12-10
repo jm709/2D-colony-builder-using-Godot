@@ -12,7 +12,7 @@ var durability : int = maxDurability
 @export var workRequired: int
 @export var resourcesRequired: Dictionary
 @export var isRestingSpot: bool
-@export var drops: Array[DropData] = []
+@export var drops: Array[itemCATA] = []
 @export var buildReq: Array[itemCATA] = []
 @export var coords: Vector2 = Vector2(0,0)
 @export var naviagable: bool = false
