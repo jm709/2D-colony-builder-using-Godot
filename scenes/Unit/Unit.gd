@@ -40,15 +40,37 @@ func doTask():
 	else:
 		print(currentTask)
 		if currentTask == "Chop" || currentTask == "Mine":
-			var distance = (abs(taskPos - pos))
-			if distance == Vector2(0,1) || distance == Vector2(1,0):
+			if nextTo(taskPos):
 				breakbuilding()
 		elif currentTask == "Haul":
 			var distance = (abs(taskPos - pos))
 			if distance == Vector2(0,0):
 				pickUp(taskPos)
+		elif currentTask == "Store":
+			if nextTo(taskPos):
+				storeinv()
 
-					
+func storeinv():
+	var storage = grid.grid[taskPos].building.stores
+	for itemcata in storage:
+		if itemcata.item.id == data.hauling.item.id:
+			if (itemcata.CurrentAmount - itemcata.TotalAmount) < data.hauling.amount:
+				itemcata.CurrentAmount += data.hauling.amount
+				data.hauling = null
+				break
+			else:
+				var difference = (itemcata.TotalAmount - itemcata.CurrentAmount)
+				itemcata.CurrentAmount = itemcata.TotalAmount
+				data.hauling.amount -= difference
+				break
+	currentTask = null
+
+func nextTo(thepos):
+	var distance = (abs(thepos - pos))
+	if distance == Vector2(0,1) || distance == Vector2(1,0):
+		return true
+	return false
+
 func breakbuilding():
 	grid.grid[taskPos].building.durability -= 20
 	if (grid.grid[taskPos].building.durability <= 0):
@@ -58,18 +80,44 @@ func breakbuilding():
 		currentTask = null
 
 func pickUp(_pos):
-	if (data.hauling.size() == 0):
+	if (data.hauling == null):
 		var item = grid.grid[_pos].building
-		data.hauling.append(item)
+		data.hauling = item
 		grid.itemOverlay.set_stack(_pos, 0, grid.gridToWorld(_pos))
 		grid.grid[_pos].building = null
 		grid.refreshTile(_pos)
 		
-		currentTask = "Store"
+	if (data.hauling != null):
+		var item = grid.grid[_pos].building
+		if data.hauling != item:
+			gotoThing("Storage")
+		else:
+			var left = (data.hauling.item.maxStack - data.hauling.amount)
+			if (item.amount <= left):
+				data.hauling += item.amount
+				grid.itemOverlay.set_stack(_pos, 0, grid.gridToWorld(_pos))
+				grid.grid[_pos].building = null
+			else:
+				item.amount = data.hauling.item.maxStack
+				item.amount -= left
+				grid.itemOverlay.set_stack(_pos, item.amount, grid.gridToWorld(_pos))
 
-func store(_pos):
-	pass
+		grid.refreshTile(_pos)
 
+func gotoThing(thing: String):
+	var closest = Vector2(99,99)
+	if grid.findX.has(thing):
+		for pos_ in grid.findX[thing]:
+			print(abs(closest - pos_))
+			print(abs(pos_ - taskPos))
+			if abs(closest - pos_) > abs(pos_ - taskPos):
+				closest = pos_
+	if closest == Vector2(99,99):
+		print("Ain't shit")
+	else:
+		set_task("Store", closest)
+		
+		
 func getTask():
 	pass
 func move(delta):

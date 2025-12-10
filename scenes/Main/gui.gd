@@ -19,9 +19,9 @@ var selectedObject = null:
 				"Unit":
 					$InfoPanel/Name.text = value.data.name
 					$BaseButtons/HBoxContainer/Bio.visible = true
-					if (value.data.hauling.size() != 0):
-						$InfoPanel/haulAmount.text = str(value.data.hauling[0].amount)
-						$InfoPanel/haulIcon.texture = value.data.hauling[0].item.texture
+					if (value.data.hauling != null):
+						$InfoPanel/haulAmount.text = str(value.data.hauling.amount)
+						$InfoPanel/haulIcon.texture = value.data.hauling.item.texture
 				"Cell":
 					if value.building != null:
 						match value.building.get_class():

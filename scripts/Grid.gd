@@ -80,3 +80,6 @@ func addFindable(_pos: Vector2, thing):
 	else:
 		findX[str(thing)] = [_pos]
 	print(findX[str(thing)])
+	
+func rmvFindable(_pos: Vector2, thing):
+	findX[str(thing)].remove(_pos)
