@@ -15,11 +15,18 @@ var selectedObject = null:
 		selectedObject = value
 		if value != null:
 			$InfoPanel.visible = true
+			$BaseButtons/HBoxContainer/Bio.visible = false
+			$InfoPanel/haulAmount.visible = false
+			$InfoPanel/haulIcon.visible = false
+			$InfoPanel/Durability.visible = false
+			$InfoPanel/Stores.visible = false
 			match value.get_class():
 				"Unit":
 					$InfoPanel/Name.text = value.data.name
 					$BaseButtons/HBoxContainer/Bio.visible = true
 					if (value.data.hauling != null):
+						$InfoPanel/haulAmount.visible = true
+						$InfoPanel/haulIcon.visible = true
 						$InfoPanel/haulAmount.text = str(value.data.hauling.CurrentAmount)
 						$InfoPanel/haulIcon.texture = value.data.hauling.item.texture
 				"Cell":
@@ -31,10 +38,12 @@ var selectedObject = null:
 							"Plant":
 								$InfoPanel/Name.text = value.building.name
 								var dline = ("Durablity: %d / %d" % [value.building.durability, value.building.maxDurability])
+								$InfoPanel/Durability.visible = true
 								$InfoPanel/Durability.text = dline
 							"Production":
 								$InfoPanel/Name.text = value.building.name
 								var dline = ("Durablity: %d / %d" % [value.building.durability, value.building.maxDurability])
+								$InfoPanel/Durability.visible = true
 								$InfoPanel/Durability.text = dline
 							"Storage":
 								$InfoPanel/Name.text = value.building.name
@@ -43,19 +52,19 @@ var selectedObject = null:
 									var item_name = item.item.name
 									lines.append("%s: %d / %d" % [item_name, item.CurrentAmount, item.TotalAmount])
 								$InfoPanel/Stores.text = "\n".join(lines)
+								$InfoPanel/Stores.visible = true
 								var dline = ("Durablity: %d / %d" % [value.building.durability, value.building.maxDurability])
+								$InfoPanel/Durability.visible = true
 								$InfoPanel/Durability.text = dline
 					else:
 						match value.floorData.get_class():
 							"Floor":
 								$InfoPanel/Name.text = value.floorData.name
-								$InfoPanel/haulAmount.text = ""
-								$InfoPanel/haulIcon.texture = null
 								$BaseButtons/HBoxContainer/Bio.visible = true
 							
 		else:
 			$InfoPanel.visible = false
-			$BaseButtons/HBoxContainer/Bio.visible = false
+			
 
 var rclickedObject = null:
 	get:

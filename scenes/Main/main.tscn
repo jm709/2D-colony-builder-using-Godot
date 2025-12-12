@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://b5npiekbsl1a3"]
+[gd_scene load_steps=41 format=3 uid="uid://b5npiekbsl1a3"]
 
 [ext_resource type="Script" uid="uid://k4fhtwc2tv2p" path="res://scenes/Main/main.gd" id="1_px18m"]
 [ext_resource type="Script" uid="uid://coat0elfombhf" path="res://scripts/Grid.gd" id="2_8gcrf"]
@@ -9,9 +9,13 @@
 [ext_resource type="Texture2D" uid="uid://da38snvwt80rg" path="res://art/missing.png" id="4_f0cp1"]
 [ext_resource type="Texture2D" uid="uid://71bngiyqg4ew" path="res://art/buildings/storage.png" id="4_f143f"]
 [ext_resource type="Script" uid="uid://dwgr5oy54l7xb" path="res://scenes/Main/pathfinding.gd" id="4_rdp1x"]
+[ext_resource type="Texture2D" uid="uid://bryi7ejt82gbj" path="res://art/stonefloor_spawn.png" id="5_jhp5o"]
 [ext_resource type="Texture2D" uid="uid://cg5v0omgv2dwr" path="res://art/stonewall.png" id="5_qavmp"]
+[ext_resource type="Texture2D" uid="uid://d0eys3ooyvcnd" path="res://art/ironfloor_spawn.png" id="6_ixvot"]
 [ext_resource type="Texture2D" uid="uid://hi2l4ikeppdr" path="res://art/tree.png" id="6_yye4h"]
+[ext_resource type="Texture2D" uid="uid://djsvk6x3mfntl" path="res://art/ironore_s.png" id="7_0aed0"]
 [ext_resource type="Texture2D" uid="uid://clg5xyqu770wx" path="res://art/woodwall.png" id="7_v04fw"]
+[ext_resource type="Texture2D" uid="uid://ca708l2ohitse" path="res://art/mine.png" id="8_qcehk"]
 [ext_resource type="Texture2D" uid="uid://6tqi42rod2su" path="res://art/wood.png" id="8_yye4h"]
 [ext_resource type="Texture2D" uid="uid://cv2u8n3wuy7bs" path="res://art/items/stone.png" id="9_v04fw"]
 [ext_resource type="Texture2D" uid="uid://bh3h4p3nvkq1q" path="res://art/buildings/lil hoose.png" id="11_mysde"]
@@ -35,6 +39,26 @@ texture_region_size = Vector2i(128, 128)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jhp5o"]
 texture = ExtResource("4_f143f")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jti5r"]
+texture = ExtResource("5_jhp5o")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vu8r1"]
+texture = ExtResource("6_ixvot")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w5pvf"]
+texture = ExtResource("7_0aed0")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dvnk3"]
+texture = ExtResource("8_qcehk")
 texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 
@@ -95,6 +119,10 @@ sources/7 = SubResource("TileSetAtlasSource_2ep58")
 sources/8 = SubResource("TileSetAtlasSource_ixvot")
 sources/9 = SubResource("TileSetAtlasSource_0aed0")
 sources/10 = SubResource("TileSetAtlasSource_jhp5o")
+sources/11 = SubResource("TileSetAtlasSource_jti5r")
+sources/12 = SubResource("TileSetAtlasSource_vu8r1")
+sources/13 = SubResource("TileSetAtlasSource_w5pvf")
+sources/14 = SubResource("TileSetAtlasSource_dvnk3")
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_px18m")

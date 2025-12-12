@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ProductionBData" load_steps=4 format=3 uid="uid://dviiwgtf4p34n"]
+
+[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="1_5kt6e"]
+[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/CellScripts/DropData.gd" id="2_n2yj2"]
+[ext_resource type="Script" uid="uid://bsirpagcj17dx" path="res://scripts/CellScripts/BuildingScripts/ProductionBData.gd" id="3_qrl7l"]
+
+[resource]
+script = ExtResource("3_qrl7l")
+id = 14
+name = "Mine"
+metadata/_custom_type_script = "uid://bsirpagcj17dx"
