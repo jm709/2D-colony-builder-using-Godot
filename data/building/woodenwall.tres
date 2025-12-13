@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/CellScripts/BuildingScripts/BuildingData.gd" id="2_5fdb7"]
 [ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="2_8rxwk"]
 [ext_resource type="Resource" uid="uid://b66t74qfp7bmc" path="res://data/resources/wood.tres" id="2_adib7"]
-[ext_resource type="Texture2D" uid="uid://clg5xyqu770wx" path="res://art/woodwall.png" id="3_5fdb7"]
+[ext_resource type="Texture2D" uid="uid://clg5xyqu770wx" path="res://art/buildings/woodwall.png" id="3_5fdb7"]
 
 [sub_resource type="Resource" id="Resource_8rxwk"]
 script = ExtResource("2_8rxwk")

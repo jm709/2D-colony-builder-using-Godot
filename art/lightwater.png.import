@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ca708l2ohitse"
-path="res://.godot/imported/mine.png-37ef96b881ce356099cf8163fe83f315.ctex"
+uid="uid://wgtd2w3bw0vy"
+path="res://.godot/imported/lightwater.png-6934c01fbf1383ac7ed6f70f7909fa90.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/mine.png"
-dest_files=["res://.godot/imported/mine.png-37ef96b881ce356099cf8163fe83f315.ctex"]
+source_file="res://art/lightwater.png"
+dest_files=["res://.godot/imported/lightwater.png-6934c01fbf1383ac7ed6f70f7909fa90.ctex"]
 
 [params]
 

@@ -4,7 +4,8 @@ extends Node2D
 @onready var gui = get_node("CanvasLayer/GUI")
 
 func _ready():
-	grid.generateGrid()
+	grid._initializeNoise()
+	grid.generateChunk()
 	$Grid/Pathfinding.initialize()
 
 func _unhandled_input(event: InputEvent):

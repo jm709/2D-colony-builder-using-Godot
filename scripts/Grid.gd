@@ -13,11 +13,23 @@ var grid: Dictionary = {}
 
 @onready var findX : Dictionary = {}
 
+var moisture = FastNoiseLite.new()
+var temperature = FastNoiseLite.new()
+var altitude =  FastNoiseLite.new()
+
+# chunk dimensions in number of tiles
+var chunk_x = 128 
+var chunk_y = 128
+
 signal unitSelected(obj)
 
 func _ready():
 	unitSelected.connect(gui.setSelectedObject)
 
+func _initializeNoise():
+	moisture.seed = randi()
+	temperature.seed = randi()
+	altitude.seed = randi()
 
 @export var show_debug: bool = false
 func generateGrid():
@@ -37,7 +49,47 @@ func generateGrid():
 				label.position = gridToWorld(Vector2(x,y))
 				label.text = str(Vector2(x,y))
 				$Debug.add_child(label)
+
+func generateChunk():
+	var tile_pos = worldToGrid(Vector2(0,0))
+	for x in range(chunk_x):
+		for y in range(chunk_y):
+			grid[Vector2(x,y)] = CellData.new(Vector2(chunk_x,chunk_y))
 			
+			var world_x = tile_pos.x - chunk_x / 2 + x
+			var world_y = tile_pos.y - chunk_y / 2 + y
+			
+			var moist = moisture.get_noise_2d(world_x, world_y) * 10
+			var temp = temperature.get_noise_2d(world_x, world_y) * 10
+			var alt = altitude.get_noise_2d(world_x, world_y) * 10
+			
+			if alt < 1:
+				grid[Vector2(x,y)].floorData = preload("res://data/floor/deepwater.tres")
+			elif alt < 2:
+				grid[Vector2(x,y)].floorData = preload("res://data/floor/shallowwater.tres")
+			elif alt >= 2 and moist > 5:
+				grid[Vector2(x,y)].floorData = preload("res://data/floor/stonefloor_s.tres")
+			else:
+				if moist < 2:
+					grid[Vector2(x,y)].floorData = preload("res://data/floor/dirt.tres")
+				else:
+					grid[Vector2(x,y)].floorData = preload("res://data/floor/grass.tres")
+			grid[Vector2(x,y)].building = null
+			refreshTile(Vector2(x,y))
+			if show_debug:
+				var rect = ReferenceRect.new()
+				rect.position = gridToWorld(Vector2(x,y))
+				rect.size = Vector2(cell_size, cell_size)
+				rect.editor_only = false
+				$Debug.add_child(rect)
+				var label = Label.new()
+				label.position = gridToWorld(Vector2(x,y))
+				label.text = str(Vector2(x,y))
+				$Debug.add_child(label)
+
+
+
+
 func gridToWorld(_pos: Vector2) -> Vector2:
 	return _pos * cell_size
 	

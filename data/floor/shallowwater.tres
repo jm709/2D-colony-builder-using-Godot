@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FloorData" load_steps=2 format=3 uid="uid://drrkb1t3mhiu0"]
+
+[ext_resource type="Script" uid="uid://dw2moswaove6a" path="res://scripts/CellScripts/FloorData.gd" id="1_pna81"]
+
+[resource]
+script = ExtResource("1_pna81")
+name = "Shallow Water"
+id = 16
+metadata/_custom_type_script = "uid://dw2moswaove6a"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://b5npiekbsl1a3"]
+[gd_scene load_steps=45 format=3 uid="uid://b5npiekbsl1a3"]
 
 [ext_resource type="Script" uid="uid://k4fhtwc2tv2p" path="res://scenes/Main/main.gd" id="1_px18m"]
 [ext_resource type="Script" uid="uid://coat0elfombhf" path="res://scripts/Grid.gd" id="2_8gcrf"]
@@ -14,10 +14,12 @@
 [ext_resource type="Texture2D" uid="uid://d0eys3ooyvcnd" path="res://art/ironfloor_spawn.png" id="6_ixvot"]
 [ext_resource type="Texture2D" uid="uid://hi2l4ikeppdr" path="res://art/tree.png" id="6_yye4h"]
 [ext_resource type="Texture2D" uid="uid://djsvk6x3mfntl" path="res://art/ironore_s.png" id="7_0aed0"]
-[ext_resource type="Texture2D" uid="uid://clg5xyqu770wx" path="res://art/woodwall.png" id="7_v04fw"]
-[ext_resource type="Texture2D" uid="uid://ca708l2ohitse" path="res://art/mine.png" id="8_qcehk"]
+[ext_resource type="Texture2D" uid="uid://clg5xyqu770wx" path="res://art/buildings/woodwall.png" id="7_v04fw"]
+[ext_resource type="Texture2D" uid="uid://ca708l2ohitse" path="res://art/buildings/mine.png" id="8_qcehk"]
 [ext_resource type="Texture2D" uid="uid://6tqi42rod2su" path="res://art/wood.png" id="8_yye4h"]
+[ext_resource type="Texture2D" uid="uid://daqwiap2b3c65" path="res://art/deepwater.png" id="9_0aed0"]
 [ext_resource type="Texture2D" uid="uid://cv2u8n3wuy7bs" path="res://art/items/stone.png" id="9_v04fw"]
+[ext_resource type="Texture2D" uid="uid://wgtd2w3bw0vy" path="res://art/lightwater.png" id="10_qcehk"]
 [ext_resource type="Texture2D" uid="uid://bh3h4p3nvkq1q" path="res://art/buildings/lil hoose.png" id="11_mysde"]
 [ext_resource type="Script" uid="uid://dgnapodiyl04i" path="res://scenes/Main/gui.gd" id="12_3348s"]
 [ext_resource type="Texture2D" uid="uid://vuingj0a06pd" path="res://art/buildings/Lumberjack.png" id="12_r08jt"]
@@ -59,6 +61,16 @@ texture_region_size = Vector2i(128, 128)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dvnk3"]
 texture = ExtResource("8_qcehk")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s8bn6"]
+texture = ExtResource("9_0aed0")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nwfsi"]
+texture = ExtResource("10_qcehk")
 texture_region_size = Vector2i(128, 128)
 0:0/0 = 0
 
@@ -123,6 +135,8 @@ sources/11 = SubResource("TileSetAtlasSource_jti5r")
 sources/12 = SubResource("TileSetAtlasSource_vu8r1")
 sources/13 = SubResource("TileSetAtlasSource_w5pvf")
 sources/14 = SubResource("TileSetAtlasSource_dvnk3")
+sources/15 = SubResource("TileSetAtlasSource_s8bn6")
+sources/16 = SubResource("TileSetAtlasSource_nwfsi")
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_px18m")

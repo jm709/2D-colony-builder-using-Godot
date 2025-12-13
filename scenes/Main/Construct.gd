@@ -3,7 +3,6 @@ extends Control
 
 @onready var main = get_tree().root.get_node("Main")
 @onready var grid : Grid = main.get_node("Grid")
-@onready var gui : GUI = main.get_node("GUI")
 
 signal unitSelected(obj)
 
