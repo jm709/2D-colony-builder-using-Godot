@@ -12,7 +12,6 @@ var grid: Dictionary = {}
 @onready var findX : Dictionary = {}
 
 var chunk_loader: ChunkLoader = null
-var world: World = null
 
 @export var show_debug: bool = false
 

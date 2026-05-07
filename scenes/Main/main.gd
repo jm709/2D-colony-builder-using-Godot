@@ -19,7 +19,6 @@ func _ready():
 	chunk_loader.world = world
 	add_child(chunk_loader)
 	grid.chunk_loader = chunk_loader
-	grid.world = world
 
 	# Pathfinder must add points before Grid inserts tiles + refreshes.
 	chunk_loader.chunk_loaded.connect(grid.path._on_chunk_loaded)
