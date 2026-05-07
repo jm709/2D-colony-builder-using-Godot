@@ -9,6 +9,10 @@ func run() -> void:
 	_test_add_dedup()
 	_test_chunk_loaded_indexes_buildings()
 	_test_chunk_unloaded_clears_chunk()
+	_test_chunks_at_ring()
+	_test_find_nearest_same_chunk()
+	_test_find_nearest_spiral_outward()
+	_test_find_nearest_no_match()
 
 func _make_world(chunk_size: int = 4) -> World:
 	var w := World.new()
@@ -82,4 +86,39 @@ func _test_chunk_unloaded_clears_chunk() -> void:
 	TestHelpers.expect(idx.get_tiles_with_tag(&"item_id:6").is_empty(), "chunk_unloaded: tag cleared")
 	TestHelpers.expect(not idx._by_chunk.has(Vector2i(0, 0)), "chunk_unloaded: _by_chunk entry erased")
 	TestHelpers.expect(not idx._tags_by_chunk.has(Vector2i(0, 0)), "chunk_unloaded: _tags_by_chunk entry erased")
+	idx.free()
+
+func _test_chunks_at_ring() -> void:
+	var ring0 := EntityIndex.chunks_at_ring(Vector2i(5, 5), 0)
+	TestHelpers.expect_eq(ring0, [Vector2i(5, 5)], "ring 0 = [center]")
+	var ring1 := EntityIndex.chunks_at_ring(Vector2i(5, 5), 1)
+	TestHelpers.expect_eq(ring1.size(), 8, "ring 1 has 8 chunks")
+	TestHelpers.expect(Vector2i(4, 4) in ring1, "ring 1 contains corner (4,4)")
+	TestHelpers.expect(Vector2i(6, 6) in ring1, "ring 1 contains corner (6,6)")
+	TestHelpers.expect(not (Vector2i(5, 5) in ring1), "ring 1 excludes center")
+
+func _test_find_nearest_same_chunk() -> void:
+	var w := _make_world()
+	var idx := _make_index(w)
+	idx.add(Vector2(1, 1), [&"item"])
+	idx.add(Vector2(3, 3), [&"item"])
+	var nearest := idx.find_nearest(Vector2(0, 0), &"item")
+	TestHelpers.expect_eq(nearest, Vector2(1, 1), "find_nearest picks closest in same chunk")
+	idx.free()
+
+func _test_find_nearest_spiral_outward() -> void:
+	# chunk_size=4, so chunks (0,0) covers (0..3, 0..3); (1,0) covers (4..7, 0..3).
+	var w := _make_world()
+	var idx := _make_index(w)
+	# nothing in chunk (0,0); something in chunk (1,0).
+	idx.add(Vector2(5, 0), [&"item"])
+	var nearest := idx.find_nearest(Vector2(0, 0), &"item")
+	TestHelpers.expect_eq(nearest, Vector2(5, 0), "find_nearest spirals to neighbor chunk")
+	idx.free()
+
+func _test_find_nearest_no_match() -> void:
+	var w := _make_world()
+	var idx := _make_index(w)
+	var nearest := idx.find_nearest(Vector2(0, 0), &"item")
+	TestHelpers.expect_eq(nearest, Vector2.INF, "find_nearest returns Vector2.INF when no match")
 	idx.free()

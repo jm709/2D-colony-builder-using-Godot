@@ -60,3 +60,39 @@ func _on_chunk_loaded(_coord: Vector2i, chunk: Chunk) -> void:
 func _on_chunk_unloaded(coord: Vector2i, _chunk: Chunk) -> void:
 	_by_chunk.erase(coord)
 	_tags_by_chunk.erase(coord)
+
+const DEFAULT_SEARCH_CHUNKS := 3
+
+func find_nearest(start_pos: Vector2, tag: StringName, search_chunks: int = DEFAULT_SEARCH_CHUNKS) -> Vector2:
+	if world == null:
+		return Vector2.INF
+	var start_chunk: Vector2i = world.chunk_of_tile(start_pos)
+	for ring in range(search_chunks):
+		for chunk_coord in chunks_at_ring(start_chunk, ring):
+			if not _by_chunk.has(chunk_coord):
+				continue
+			var hits: Array = _by_chunk[chunk_coord].get(tag, [])
+			if hits.is_empty():
+				continue
+			return _nearest_in(hits, start_pos)
+	return Vector2.INF
+
+static func chunks_at_ring(center: Vector2i, ring: int) -> Array:
+	if ring == 0:
+		return [center]
+	var result: Array = []
+	for dy in range(-ring, ring + 1):
+		for dx in range(-ring, ring + 1):
+			if max(abs(dx), abs(dy)) == ring:
+				result.append(center + Vector2i(dx, dy))
+	return result
+
+static func _nearest_in(positions: Array, start_pos: Vector2) -> Vector2:
+	var best: Vector2 = positions[0]
+	var best_dist: float = start_pos.distance_squared_to(best)
+	for i in range(1, positions.size()):
+		var d: float = start_pos.distance_squared_to(positions[i])
+		if d < best_dist:
+			best_dist = d
+			best = positions[i]
+	return best
