@@ -63,6 +63,8 @@ func _on_chunk_unloaded(coord: Vector2i, _chunk: Chunk) -> void:
 
 const DEFAULT_SEARCH_CHUNKS := 3
 
+# Returns on the first non-empty Chebyshev ring. A far corner of ring N can win
+# over a near corner of ring N+1; acceptable approximation for v1.
 func find_nearest(start_pos: Vector2, tag: StringName, search_chunks: int = DEFAULT_SEARCH_CHUNKS) -> Vector2:
 	if world == null:
 		return Vector2.INF
