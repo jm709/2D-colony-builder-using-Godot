@@ -6,7 +6,7 @@ const DEFAULT_CHUNK_SIZE := 64
 
 @onready var grid: Grid = $Grid
 @onready var gui = get_node("CanvasLayer/GUI")
-@onready var camera = $Camera
+@onready var camera: GameCamera = $Camera
 
 var world: World
 var chunk_loader: ChunkLoader
