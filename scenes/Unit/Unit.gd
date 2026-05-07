@@ -141,37 +141,24 @@ func pickUp(_pos):
 			if (item.CurrentAmount <= left):
 				data.hauling.CurrentAmount += item.CurrentAmount
 				grid.removeBuilding(_pos)
-				
+
 			else:
 				data.hauling.CurrentAmount = data.hauling.item.maxStack
 				item.CurrentAmount -= left
 				grid.itemOverlay.set_stack(_pos, item.CurrentAmount, grid.gridToWorld(_pos))
-				
+
 		grid.refreshTile(_pos)
-		## check if theres more
-		_pos = gotoThing(str(data.hauling.id))
-		if data.hauling.CurrentAmount == data.hauling.item.maxStack or _pos == null:
-			_pos = gotoThing("Storage")
-			if _pos != null:
-				set_task("Store", _pos)
+		## check if there's more
+		var next_pos: Vector2 = grid.entity_index.find_nearest_haulable(pos, data.hauling.id)
+		if data.hauling.CurrentAmount == data.hauling.item.maxStack or next_pos == Vector2.INF:
+			var storage_pos: Vector2 = grid.entity_index.find_nearest_storage_accepting(pos, data.hauling.id)
+			if storage_pos != Vector2.INF:
+				set_task("Store", storage_pos)
 		else:
-			set_task("Haul", _pos)
+			set_task("Haul", next_pos)
 
 		
 
-func gotoThing(thing: String):
-	if not grid.findX.has(thing):
-		return null
-	var best = null
-	var best_dist := INF
-	for pos_ in grid.findX[thing]:
-		var d = pos.distance_squared_to(pos_)
-		if d < best_dist:
-			best_dist = d
-			best = pos_
-	return best
-		
-		
 func getTask():
 	pass
 func move(delta):
