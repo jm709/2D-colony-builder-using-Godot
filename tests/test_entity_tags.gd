@@ -28,6 +28,7 @@ func _test_storage_tags() -> void:
 	TestHelpers.expect(&"accepts:stone" in tags, "StorageBData has 'accepts:stone' tag")
 	TestHelpers.expect(&"accepts_id:6" in tags, "StorageBData has 'accepts_id:6' tag (wood)")
 	TestHelpers.expect(&"accepts_id:7" in tags, "StorageBData has 'accepts_id:7' tag (stone)")
+	TestHelpers.expect_eq(tags.size(), 6, "StorageBData tag count")
 
 func _test_plain_building_tags() -> void:
 	var building := BuildingData.new()

@@ -1,7 +1,7 @@
 class_name EntityTags
 extends Object
 
-static func tags_for(thing) -> Array:
+static func tags_for(thing: Variant) -> Array:
 	if thing is ItemStack:
 		return _tags_for_item(thing)
 	if thing is StorageBData:
