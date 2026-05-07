@@ -96,3 +96,9 @@ static func _nearest_in(positions: Array, start_pos: Vector2) -> Vector2:
 			best_dist = d
 			best = positions[i]
 	return best
+
+func find_nearest_haulable(start_pos: Vector2, item_id: int) -> Vector2:
+	return find_nearest(start_pos, StringName("item_id:" + str(item_id)))
+
+func find_nearest_storage_accepting(start_pos: Vector2, item_id: int) -> Vector2:
+	return find_nearest(start_pos, StringName("accepts_id:" + str(item_id)))

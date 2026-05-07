@@ -1,6 +1,7 @@
 extends RefCounted
 
 const WoodItem = preload("res://data/resources/wood.tres")
+const StorageRes = preload("res://data/building/production/littlestorage.tres")
 
 func run() -> void:
 	print("test_entity_index:")
@@ -13,6 +14,8 @@ func run() -> void:
 	_test_find_nearest_same_chunk()
 	_test_find_nearest_spiral_outward()
 	_test_find_nearest_no_match()
+	_test_find_nearest_haulable()
+	_test_find_nearest_storage_accepting()
 
 func _make_world(chunk_size: int = 4) -> World:
 	var w := World.new()
@@ -121,4 +124,25 @@ func _test_find_nearest_no_match() -> void:
 	var idx := _make_index(w)
 	var nearest := idx.find_nearest(Vector2(0, 0), &"item")
 	TestHelpers.expect_eq(nearest, Vector2.INF, "find_nearest returns Vector2.INF when no match")
+	idx.free()
+
+func _test_find_nearest_haulable() -> void:
+	var w := _make_world()
+	var idx := _make_index(w)
+	var stack := ItemStack.new(WoodItem, 1)
+	idx.add(Vector2(2, 2), EntityTags.tags_for(stack))
+	var nearest := idx.find_nearest_haulable(Vector2(0, 0), 6)  # wood id is 6
+	TestHelpers.expect_eq(nearest, Vector2(2, 2), "find_nearest_haulable picks tile by item_id")
+	idx.free()
+
+func _test_find_nearest_storage_accepting() -> void:
+	var w := _make_world()
+	var idx := _make_index(w)
+	var storage: StorageBData = StorageRes.duplicate(true)
+	idx.add(Vector2(2, 2), EntityTags.tags_for(storage))
+	var nearest := idx.find_nearest_storage_accepting(Vector2(0, 0), 6)  # wood
+	TestHelpers.expect_eq(nearest, Vector2(2, 2), "find_nearest_storage_accepting matches accepts_id:6")
+	# Storage that doesn't accept the item should not match.
+	var no_match := idx.find_nearest_storage_accepting(Vector2(0, 0), 999)
+	TestHelpers.expect_eq(no_match, Vector2.INF, "find_nearest_storage_accepting returns INF for non-accepted")
 	idx.free()
