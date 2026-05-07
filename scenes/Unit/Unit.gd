@@ -69,7 +69,7 @@ func _exit_tree():
 
 func _clear_task() -> void:
 	currentTask = null
-	if _task_has_pin:
+	if _task_has_pin and chunk_loader != null:
 		chunk_loader.unpin(_task_pinned_chunk)
 		_task_has_pin = false
 
