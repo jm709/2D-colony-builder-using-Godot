@@ -1,6 +1,8 @@
 class_name ChunkLoader
 extends Node
 
+const AUTOSAVE_INTERVAL := 60.0
+
 signal chunk_loaded(coord: Vector2i, chunk: Chunk)
 signal chunk_unloaded(coord: Vector2i, chunk: Chunk)
 
@@ -8,6 +10,21 @@ var world: World
 
 var loaded: Dictionary = {}       # Vector2i -> Chunk
 var _refcounts: Dictionary = {}   # Vector2i -> int
+var _autosave_elapsed: float = 0.0
+
+func _process(delta: float) -> void:
+	_autosave_elapsed += delta
+	if _autosave_elapsed >= AUTOSAVE_INTERVAL:
+		_autosave_elapsed = 0.0
+		save_dirty()
+
+func mark_dirty(tile_pos: Vector2) -> void:
+	if world == null:
+		return
+	var coord: Vector2i = world.chunk_of_tile(tile_pos)
+	var chunk: Chunk = loaded.get(coord, null)
+	if chunk != null:
+		chunk.dirty = true
 
 func pin(coord: Vector2i) -> void:
 	if world == null:

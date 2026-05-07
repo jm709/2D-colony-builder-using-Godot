@@ -6,17 +6,19 @@ const DEFAULT_CHUNK_SIZE := 64
 
 @onready var grid: Grid = $Grid
 @onready var gui = get_node("CanvasLayer/GUI")
-@onready var camera: Camera2D = $Camera
+@onready var camera: GameCamera = $Camera
 
 var world: World
 var chunk_loader: ChunkLoader
 
 func _ready():
+	get_tree().set_auto_accept_quit(false)
 	world = _load_or_create_world()
 	chunk_loader = ChunkLoader.new()
 	chunk_loader.name = "ChunkLoader"
 	chunk_loader.world = world
 	add_child(chunk_loader)
+	grid.chunk_loader = chunk_loader
 
 	# Pathfinder must add points before Grid inserts tiles + refreshes.
 	chunk_loader.chunk_loaded.connect(grid.path._on_chunk_loaded)
@@ -24,8 +26,19 @@ func _ready():
 	chunk_loader.chunk_unloaded.connect(grid._on_chunk_unloaded)
 	chunk_loader.chunk_unloaded.connect(grid.path._on_chunk_unloaded)
 
-	_pin_spawn_area()
 	_center_camera_on_spawn()
+	camera.setup(chunk_loader, world, grid)
+
+	var spawn_tile := world.spawn_tile()
+	for unit in $Grid/Units.get_children():
+		if unit is Unit:
+			unit.setup(chunk_loader, world, spawn_tile)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if chunk_loader != null:
+			chunk_loader.save_dirty()
+		get_tree().quit()
 
 func _load_or_create_world() -> World:
 	var world_path := "user://saves/%s/world.res" % DEFAULT_WORLD_NAME
@@ -38,12 +51,6 @@ func _load_or_create_world() -> World:
 	w.world_seed = randi()
 	WorldGenerator.generate_world(w)
 	return w
-
-func _pin_spawn_area() -> void:
-	var spawn := world.spawn_chunk()
-	for dy in range(-1, 2):
-		for dx in range(-1, 2):
-			chunk_loader.pin(spawn + Vector2i(dx, dy))
 
 func _center_camera_on_spawn() -> void:
 	var spawn := world.spawn_chunk()

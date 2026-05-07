@@ -20,19 +20,71 @@ var taskPos
 var path: Array[Vector2]
 var pos: Vector2
 
+var chunk_loader: ChunkLoader = null
+var world: World = null
+var _pinned_chunk: Vector2i
+var _has_pin: bool = false
+var _task_pinned_chunk: Vector2i
+var _task_has_pin: bool = false
+
 func _ready():
 	pos = grid.worldToGrid(position)
 	unitSelected.connect(gui.setSelectedObject)
-	
+
 var time_elapsed := 0.0
 
 func _process(delta):
 	time_elapsed += delta
 	move(delta)
+	_update_chunk_pin()
 	if time_elapsed >= data.taskSpeed / TASK_TICKS_PER_SECOND:
 		time_elapsed = 0.0
 		doTask()
-	
+
+func setup(loader: ChunkLoader, w: World, start_tile: Vector2) -> void:
+	chunk_loader = loader
+	world = w
+	position = grid.gridToWorld(start_tile)
+	pos = start_tile
+	_update_chunk_pin()
+
+func _update_chunk_pin() -> void:
+	if chunk_loader == null or world == null:
+		return
+	var new_chunk: Vector2i = world.chunk_of_tile(pos)
+	if new_chunk == _pinned_chunk:
+		return
+	if _has_pin:
+		chunk_loader.unpin(_pinned_chunk)
+	chunk_loader.pin(new_chunk)
+	_pinned_chunk = new_chunk
+	_has_pin = true
+
+func _exit_tree():
+	if chunk_loader != null and _has_pin:
+		chunk_loader.unpin(_pinned_chunk)
+	if chunk_loader != null and _task_has_pin:
+		chunk_loader.unpin(_task_pinned_chunk)
+		_task_has_pin = false
+
+func _clear_task() -> void:
+	currentTask = null
+	if _task_has_pin and chunk_loader != null:
+		chunk_loader.unpin(_task_pinned_chunk)
+		_task_has_pin = false
+
+func _pin_task_target(target: Vector2) -> void:
+	if chunk_loader == null or world == null:
+		return
+	var task_chunk: Vector2i = world.chunk_of_tile(target)
+	if _task_has_pin and _task_pinned_chunk == task_chunk:
+		return
+	if _task_has_pin:
+		chunk_loader.unpin(_task_pinned_chunk)
+	chunk_loader.pin(task_chunk)
+	_task_pinned_chunk = task_chunk
+	_task_has_pin = true
+
 func doTask():
 	if currentTask == null:
 		getTask()
@@ -61,7 +113,7 @@ func storeinv():
 				itemcata.CurrentAmount = itemcata.TotalAmount
 				data.hauling.CurrentAmount -= difference
 				break
-	currentTask = null
+	_clear_task()
 
 func nextTo(thepos):
 	var distance = (abs(thepos - pos))
@@ -76,7 +128,7 @@ func breakbuilding():
 		var drop : ItemStack = ItemStack.new(data_.item, data_.CurrentAmount)
 		grid.removeBuilding(taskPos)
 		grid.updateTile(taskPos, drop)
-		currentTask = null
+		_clear_task()
 
 func pickUp(_pos):
 	if (data.hauling == null or data.hauling.id == grid.grid[_pos].building.id):
@@ -138,13 +190,15 @@ func get_class():
 	return "Unit"
 	
 func set_task(task_, taskpos_):
+	_clear_task()
 	currentTask = task_
 	taskPos = taskpos_
+	_pin_task_target(taskpos_)
 	for x in pf.getPartialPath(pos, taskPos):
 		path.append(grid.worldToGrid(x))
 
 func setMoveTarget(thepos):
-	currentTask = null
+	_clear_task()
 	taskPos = null
 	for x in pf.getPath(pos, thepos):
 		path.append(grid.worldToGrid(x))
