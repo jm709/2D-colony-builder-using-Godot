@@ -1,0 +1,106 @@
+class_name EntityIndex
+extends Node
+
+var world: World
+
+# chunk_coord -> { tag -> Array[Vector2] }
+var _by_chunk: Dictionary = {}
+
+# chunk_coord -> { tile_pos -> Array[StringName] }
+var _tags_by_chunk: Dictionary = {}
+
+func add(tile_pos: Vector2, tags: Array) -> void:
+	if world == null:
+		push_error("EntityIndex.add called before world set")
+		return
+	var chunk: Vector2i = world.chunk_of_tile(tile_pos)
+	if not _by_chunk.has(chunk):
+		_by_chunk[chunk] = {}
+		_tags_by_chunk[chunk] = {}
+	if _tags_by_chunk[chunk].has(tile_pos):
+		remove(tile_pos)
+	_tags_by_chunk[chunk][tile_pos] = tags.duplicate()
+	for tag in tags:
+		var tag_map: Dictionary = _by_chunk[chunk]
+		if not tag_map.has(tag):
+			tag_map[tag] = []
+		tag_map[tag].append(tile_pos)
+
+func remove(tile_pos: Vector2) -> void:
+	if world == null:
+		return
+	var chunk: Vector2i = world.chunk_of_tile(tile_pos)
+	if not _tags_by_chunk.has(chunk):
+		return
+	var tags: Array = _tags_by_chunk[chunk].get(tile_pos, [])
+	for tag in tags:
+		var arr: Array = _by_chunk[chunk].get(tag, [])
+		arr.erase(tile_pos)
+		if arr.is_empty():
+			_by_chunk[chunk].erase(tag)
+	_tags_by_chunk[chunk].erase(tile_pos)
+
+func get_tiles_with_tag(tag: StringName) -> Array:
+	var out: Array = []
+	for chunk in _by_chunk:
+		var hits: Array = _by_chunk[chunk].get(tag, [])
+		out.append_array(hits)
+	return out
+
+func _on_chunk_loaded(_coord: Vector2i, chunk: Chunk) -> void:
+	for local_y in range(chunk.chunk_size):
+		for local_x in range(chunk.chunk_size):
+			var local := Vector2i(local_x, local_y)
+			var tile: CellData = chunk.tile_at(local)
+			if tile.building == null:
+				continue
+			var global_pos := chunk.global_pos_for(local)
+			add(global_pos, EntityTags.tags_for(tile.building))
+
+func _on_chunk_unloaded(coord: Vector2i, _chunk: Chunk) -> void:
+	_by_chunk.erase(coord)
+	_tags_by_chunk.erase(coord)
+
+const DEFAULT_SEARCH_CHUNKS := 3
+
+# Returns on the first non-empty Chebyshev ring. A far corner of ring N can win
+# over a near corner of ring N+1; acceptable approximation for v1.
+func find_nearest(start_pos: Vector2, tag: StringName, search_chunks: int = DEFAULT_SEARCH_CHUNKS) -> Vector2:
+	if world == null:
+		return Vector2.INF
+	var start_chunk: Vector2i = world.chunk_of_tile(start_pos)
+	for ring in range(search_chunks):
+		for chunk_coord in chunks_at_ring(start_chunk, ring):
+			if not _by_chunk.has(chunk_coord):
+				continue
+			var hits: Array = _by_chunk[chunk_coord].get(tag, [])
+			if hits.is_empty():
+				continue
+			return _nearest_in(hits, start_pos)
+	return Vector2.INF
+
+static func chunks_at_ring(center: Vector2i, ring: int) -> Array:
+	if ring == 0:
+		return [center]
+	var result: Array = []
+	for dy in range(-ring, ring + 1):
+		for dx in range(-ring, ring + 1):
+			if max(abs(dx), abs(dy)) == ring:
+				result.append(center + Vector2i(dx, dy))
+	return result
+
+static func _nearest_in(positions: Array, start_pos: Vector2) -> Vector2:
+	var best: Vector2 = positions[0]
+	var best_dist: float = start_pos.distance_squared_to(best)
+	for i in range(1, positions.size()):
+		var d: float = start_pos.distance_squared_to(positions[i])
+		if d < best_dist:
+			best_dist = d
+			best = positions[i]
+	return best
+
+func find_nearest_haulable(start_pos: Vector2, item_id: int) -> Vector2:
+	return find_nearest(start_pos, StringName("item_id:" + str(item_id)))
+
+func find_nearest_storage_accepting(start_pos: Vector2, item_id: int) -> Vector2:
+	return find_nearest(start_pos, StringName("accepts_id:" + str(item_id)))

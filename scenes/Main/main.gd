@@ -20,11 +20,19 @@ func _ready():
 	add_child(chunk_loader)
 	grid.chunk_loader = chunk_loader
 
+	var entity_index := EntityIndex.new()
+	entity_index.name = "EntityIndex"
+	entity_index.world = world
+	add_child(entity_index)
+	grid.entity_index = entity_index
+
 	# Pathfinder must add points before Grid inserts tiles + refreshes.
 	chunk_loader.chunk_loaded.connect(grid.path._on_chunk_loaded)
 	chunk_loader.chunk_loaded.connect(grid._on_chunk_loaded)
+	chunk_loader.chunk_loaded.connect(entity_index._on_chunk_loaded)
 	chunk_loader.chunk_unloaded.connect(grid._on_chunk_unloaded)
 	chunk_loader.chunk_unloaded.connect(grid.path._on_chunk_unloaded)
+	chunk_loader.chunk_unloaded.connect(entity_index._on_chunk_unloaded)
 
 	_center_camera_on_spawn()
 	camera.setup(chunk_loader, world, grid)
