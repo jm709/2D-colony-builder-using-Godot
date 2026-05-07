@@ -12,6 +12,7 @@ var grid: Dictionary = {}
 @onready var findX : Dictionary = {}
 
 var chunk_loader: ChunkLoader = null
+var entity_index: EntityIndex = null
 
 @export var show_debug: bool = false
 
