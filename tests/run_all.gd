@@ -5,4 +5,4 @@ func _init() -> void:
 	entity_tags_tests.run()
 	var entity_index_tests = load("res://tests/test_entity_index.gd").new()
 	entity_index_tests.run()
-	TestHelpers.summary_and_exit()
+	TestHelpers.summary_and_exit(self)

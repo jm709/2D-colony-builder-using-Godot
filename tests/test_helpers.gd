@@ -15,11 +15,6 @@ static func expect(condition: bool, msg: String) -> void:
 static func expect_eq(actual, expected, msg: String) -> void:
 	expect(actual == expected, "%s (expected %s, got %s)" % [msg, str(expected), str(actual)])
 
-static func summary_and_exit() -> void:
+static func summary_and_exit(tree: SceneTree) -> void:
 	print("\n%d passed, %d failed" % [_passes, _failures])
-	var code: int = 1 if _failures > 0 else 0
-	var loop := Engine.get_main_loop()
-	if loop is SceneTree:
-		(loop as SceneTree).quit(code)
-		return
-	OS.kill(OS.get_process_id())
+	tree.quit(1 if _failures > 0 else 0)
