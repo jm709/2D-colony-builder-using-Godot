@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="BuildingData" load_steps=3 format=3 uid="uid://ce0nvqu2ekt12"]
 
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/ItemStack.gd" id="1_mlsvs"]
+[ext_resource type="Script" path="res://scripts/CellScripts/ItemStack.gd" id="1_mlsvs"]
 [ext_resource type="Script" uid="uid://cnvtrm34jlpy3" path="res://scripts/CellScripts/BuildingScripts/BuildingData.gd" id="2_o7gnb"]
 
 [resource]

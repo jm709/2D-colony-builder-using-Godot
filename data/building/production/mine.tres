@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ProductionBData" load_steps=4 format=3 uid="uid://dviiwgtf4p34n"]
 
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/ItemStack.gd" id="1_5kt6e"]
+[ext_resource type="Script" path="res://scripts/CellScripts/ItemStack.gd" id="1_5kt6e"]
 [ext_resource type="Script" uid="uid://bsirpagcj17dx" path="res://scripts/CellScripts/BuildingScripts/ProductionBData.gd" id="3_qrl7l"]
 
 [resource]

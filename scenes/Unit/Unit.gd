@@ -3,7 +3,7 @@ extends Area2D
 
 const ARRIVAL_DIST := 5.0          # used in move()
 const BREAK_DAMAGE := 20            # used in breakbuilding()
-const TASK_TICKS_PER_SECOND := 50.0
+const TASK_TICKS_PER_SECOND := 5.0
 
 @onready var main = get_tree().root.get_node("Main")
 @onready var grid: Grid = main.get_node("Grid")
@@ -100,7 +100,8 @@ func pickUp(_pos):
 		_pos = gotoThing(str(data.hauling.id))
 		if data.hauling.CurrentAmount == data.hauling.item.maxStack or _pos == null:
 			_pos = gotoThing("Storage")
-			set_task("Store", _pos)
+			if _pos != null:
+				set_task("Store", _pos)
 		else:
 			set_task("Haul", _pos)
 

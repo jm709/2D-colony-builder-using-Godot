@@ -10,7 +10,6 @@ var durability : int = maxDurability
 @export var width : int = 1
 @export var height : int = 1
 @export var workRequired: int
-@export var resourcesRequired: Dictionary
 @export var isRestingSpot: bool
 @export var drops: Array[ItemStack] = []
 @export var buildReq: Array[ItemStack] = []

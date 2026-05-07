@@ -1,10 +1,22 @@
-[gd_resource type="Resource" script_class="StorageBData" load_steps=9 format=3 uid="uid://cb4yppjrthim3"]
+[gd_resource type="Resource" script_class="StorageBData" load_steps=10 format=3 uid="uid://cb4yppjrthim3"]
 
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/ItemStack.gd" id="2_60hf4"]
+[ext_resource type="Script" path="res://scripts/CellScripts/ItemStack.gd" id="2_60hf4"]
 [ext_resource type="Script" uid="uid://rehlpwot8mjv" path="res://scripts/CellScripts/BuildingScripts/StorageBData.gd" id="3_aukay"]
 [ext_resource type="Texture2D" uid="uid://71bngiyqg4ew" path="res://art/buildings/storage.png" id="4_60hf4"]
 [ext_resource type="Resource" uid="uid://b66t74qfp7bmc" path="res://data/resources/wood.tres" id="4_rha40"]
 [ext_resource type="Resource" uid="uid://b6pmacwar1oxp" path="res://data/resources/stone.tres" id="5_38tnf"]
+
+[sub_resource type="Resource" id="Resource_dat0v"]
+script = ExtResource("2_60hf4")
+item = ExtResource("4_rha40")
+TotalAmount = 10
+metadata/_custom_type_script = "uid://baxfo8ekf123i"
+
+[sub_resource type="Resource" id="Resource_jtrve"]
+script = ExtResource("2_60hf4")
+item = ExtResource("4_rha40")
+TotalAmount = 3
+metadata/_custom_type_script = "uid://baxfo8ekf123i"
 
 [sub_resource type="Resource" id="Resource_yqk0g"]
 script = ExtResource("2_60hf4")
@@ -24,4 +36,6 @@ stores = Array[ExtResource("2_60hf4")]([SubResource("Resource_yqk0g"), SubResour
 id = 10
 name = "little storage"
 texture = ExtResource("4_60hf4")
+drops = Array[ExtResource("2_60hf4")]([SubResource("Resource_jtrve")])
+buildReq = Array[ExtResource("2_60hf4")]([SubResource("Resource_dat0v")])
 metadata/_custom_type_script = "uid://rehlpwot8mjv"
