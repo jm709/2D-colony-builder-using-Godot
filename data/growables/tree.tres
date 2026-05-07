@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PlantData" load_steps=9 format=3 uid="uid://bcjwwvylhodfn"]
 
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="1_mxvhr"]
+[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/ItemStack.gd" id="1_mxvhr"]
 [ext_resource type="Script" uid="uid://dw2moswaove6a" path="res://scripts/CellScripts/FloorData.gd" id="2_1bu3l"]
 [ext_resource type="Texture2D" uid="uid://hi2l4ikeppdr" path="res://art/tree.png" id="2_lh4iy"]
 [ext_resource type="Resource" uid="uid://b66t74qfp7bmc" path="res://data/resources/wood.tres" id="2_mxvhr"]
@@ -22,6 +22,6 @@ texture = ExtResource("2_lh4iy")
 id = 4
 drops = Array[ExtResource("1_mxvhr")]([SubResource("Resource_naf1h")])
 growsOn = Array[ExtResource("2_1bu3l")]([ExtResource("4_naf1h"), ExtResource("5_grxpq")])
-naviagable = false
+navigable = false
 choppable = true
 metadata/_custom_type_script = "uid://djeskoxu4ti8g"

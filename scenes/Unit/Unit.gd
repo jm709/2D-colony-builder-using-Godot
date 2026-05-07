@@ -1,6 +1,10 @@
 class_name Unit
 extends Area2D
 
+const ARRIVAL_DIST := 5.0          # used in move()
+const BREAK_DAMAGE := 20            # used in breakbuilding()
+const TASK_TICKS_PER_SECOND := 50.0
+
 @onready var main = get_tree().root.get_node("Main")
 @onready var grid: Grid = main.get_node("Grid")
 @onready var pf: Pathfinder = grid.get_node("Pathfinding")
@@ -14,23 +18,18 @@ var currentTask = null
 var taskPos
 
 var path: Array[Vector2]
-var pos: Vector2 : 
-	get:
-		return pos
-	set(value):
-		pos = value
+var pos: Vector2
 
 func _ready():
 	pos = grid.worldToGrid(position)
 	unitSelected.connect(gui.setSelectedObject)
 	
-var task_interval := data.taskSpeed / 50
 var time_elapsed := 0.0
 
 func _process(delta):
 	time_elapsed += delta
 	move(delta)
-	if time_elapsed >= task_interval:
+	if time_elapsed >= data.taskSpeed / TASK_TICKS_PER_SECOND:
 		time_elapsed = 0.0
 		doTask()
 	
@@ -38,8 +37,7 @@ func doTask():
 	if currentTask == null:
 		getTask()
 	else:
-		print(currentTask)
-		if currentTask == "Chop" || currentTask == "Mine":
+		if currentTask == "Chop" or currentTask == "Mine":
 			if nextTo(taskPos):
 				breakbuilding()
 		elif currentTask == "Haul":
@@ -67,21 +65,21 @@ func storeinv():
 
 func nextTo(thepos):
 	var distance = (abs(thepos - pos))
-	if distance == Vector2(0,1) || distance == Vector2(1,0):
+	if distance == Vector2(0,1) or distance == Vector2(1,0):
 		return true
 	return false
 
 func breakbuilding():
-	grid.grid[taskPos].building.durability -= 20
+	grid.grid[taskPos].building.durability -= BREAK_DAMAGE
 	if (grid.grid[taskPos].building.durability <= 0):
 		var data_ = grid.grid[taskPos].building.drops[0]
-		var drop : itemCATA = itemCATA.new(data_.item, data_.CurrentAmount)
+		var drop : ItemStack = ItemStack.new(data_.item, data_.CurrentAmount)
 		grid.removeBuilding(taskPos)
 		grid.updateTile(taskPos, drop)
 		currentTask = null
 
 func pickUp(_pos):
-	if (data.hauling == null || data.hauling.id == grid.grid[_pos].building.id):
+	if (data.hauling == null or data.hauling.id == grid.grid[_pos].building.id):
 		var item = grid.grid[_pos].building
 		if data.hauling == null:
 			data.hauling = item
@@ -100,7 +98,7 @@ func pickUp(_pos):
 		grid.refreshTile(_pos)
 		## check if theres more
 		_pos = gotoThing(str(data.hauling.id))
-		if data.hauling.CurrentAmount == data.hauling.item.maxStack || _pos == null:
+		if data.hauling.CurrentAmount == data.hauling.item.maxStack or _pos == null:
 			_pos = gotoThing("Storage")
 			set_task("Store", _pos)
 		else:
@@ -108,24 +106,24 @@ func pickUp(_pos):
 
 		
 
-func gotoThing(thing: String, closest = Vector2(99,99)):
-	if grid.findX.has(thing):
-		for pos_ in grid.findX[thing]:
-			print(abs(closest - pos_))
-			print(abs(pos_ - pos))
-			if abs(closest - pos_) > abs(pos_ - pos):
-				closest = pos_
-	if closest == Vector2(99,99):
+func gotoThing(thing: String):
+	if not grid.findX.has(thing):
 		return null
-	else:
-		return closest
+	var best = null
+	var best_dist := INF
+	for pos_ in grid.findX[thing]:
+		var d = pos.distance_squared_to(pos_)
+		if d < best_dist:
+			best_dist = d
+			best = pos_
+	return best
 		
 		
 func getTask():
 	pass
 func move(delta):
 	if path.size() > 0:
-		if position.distance_to(grid.gridToWorld(path[0])) < 5:
+		if position.distance_to(grid.gridToWorld(path[0])) < ARRIVAL_DIST:
 			position = grid.gridToWorld(path[0])
 			pos = path[0]
 			path.pop_front()
@@ -144,7 +142,7 @@ func set_task(task_, taskpos_):
 	for x in pf.getPartialPath(pos, taskPos):
 		path.append(grid.worldToGrid(x))
 
-func movin(thepos):
+func setMoveTarget(thepos):
 	currentTask = null
 	taskPos = null
 	for x in pf.getPath(pos, thepos):

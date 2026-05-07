@@ -6,44 +6,23 @@ extends Control
 
 signal unitSelected(obj)
 
-var pos: Vector2 : 
-	get:
-		return pos
-	set(value):
-		pos = value
-	
+var pos: Vector2
+
 var selectedConstruct = null:
 	get:
 		return selectedConstruct
 	set(value):
 		selectedConstruct = value
-		#if value != null:
-			#$InfoPanel.visible = true
-			#match value.get_class():
-				#"Unit":
-					#$InfoPanel/Name.text = value.data.name
-					#$BaseButtons/HBoxContainer/Bio.visible = true
-		#else:
-			#$InfoPanel.visible = false
-			#$BaseButtons/HBoxContainer/Bio.visible = false
 
-func _on_wood_wall_pressed() -> void:
-	selectedConstruct = load("res://data/building/woodenwall.tres")
+func _select(path: String) -> void:
+	selectedConstruct = load(path)
 
-func _on_stone_wall_pressed() -> void:
-	selectedConstruct = load("res://data/building/stonewall.tres")
-
-func _on_dirt_floor_pressed() -> void:
-	selectedConstruct = load("res://data/growables/tree.tres") 
-	
-func _on_lumberjack_pressed() -> void:
-	selectedConstruct = load("res://data/building/production/lumberjack.tres") 
-
-func _on_little_storage_pressed() -> void:
-	selectedConstruct = load("res://data/building/production/littlestorage.tres") 
-
-func _on_little_house_pressed() -> void:
-	selectedConstruct = load("res://data/building/housing/littlehouse.tres") 
+func _on_wood_wall_pressed() -> void: _select("res://data/building/woodenwall.tres")
+func _on_stone_wall_pressed() -> void: _select("res://data/building/stonewall.tres")
+func _on_dirt_floor_pressed() -> void: _select("res://data/growables/tree.tres")
+func _on_lumberjack_pressed() -> void: _select("res://data/building/production/lumberjack.tres")
+func _on_little_storage_pressed() -> void: _select("res://data/building/production/littlestorage.tres")
+func _on_little_house_pressed() -> void: _select("res://data/building/housing/littlehouse.tres")
 
 func _on_back_pressed() -> void:
 	selectedConstruct = null

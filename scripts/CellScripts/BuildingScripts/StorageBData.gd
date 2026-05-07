@@ -1,7 +1,7 @@
 extends BuildingData
 class_name StorageBData
 
-@export var stores: Array[itemCATA] = []
+@export var stores: Array[ItemStack] = []
 
 @warning_ignore("native_method_override")
 func get_class():

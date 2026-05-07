@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="StorageBData" load_steps=9 format=3 uid="uid://cb4yppjrthim3"]
 
-[ext_resource type="Script" uid="uid://cehcbhws0nbr8" path="res://scripts/CellScripts/DropData.gd" id="1_gaydf"]
-[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/itemCATA.gd" id="2_60hf4"]
+[ext_resource type="Script" uid="uid://baxfo8ekf123i" path="res://scripts/CellScripts/ItemStack.gd" id="2_60hf4"]
 [ext_resource type="Script" uid="uid://rehlpwot8mjv" path="res://scripts/CellScripts/BuildingScripts/StorageBData.gd" id="3_aukay"]
 [ext_resource type="Texture2D" uid="uid://71bngiyqg4ew" path="res://art/buildings/storage.png" id="4_60hf4"]
 [ext_resource type="Resource" uid="uid://b66t74qfp7bmc" path="res://data/resources/wood.tres" id="4_rha40"]

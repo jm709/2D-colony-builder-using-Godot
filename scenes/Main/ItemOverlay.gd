@@ -1,5 +1,7 @@
 extends Node2D
 
+const LABEL_OFFSET := Vector2(100, 100)
+
 var labels := {}
 
 func set_stack(tile : Vector2i, amount : int, world_pos: Vector2):
@@ -19,4 +21,4 @@ func set_stack(tile : Vector2i, amount : int, world_pos: Vector2):
 		label = labels[tile]
 	
 	label.text = str(amount)
-	label.position = world_pos + Vector2(100,100)
+	label.position = world_pos + LABEL_OFFSET

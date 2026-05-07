@@ -7,5 +7,5 @@ extends Resource
 @export var edible: bool = false
 @export var equipable: bool = false
 @export var maxStack: int
-@export var naviagable: bool = true
+@export var navigable: bool = true
 @export var coords: Vector2=Vector2(0,0)

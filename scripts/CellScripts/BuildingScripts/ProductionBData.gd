@@ -3,7 +3,7 @@ class_name ProductionBData
 
 @export var maxWorkers: int = 1
 @export var currWorkers: int = 0
-@export var production: Array[DropData] = []
+@export var production: Array[ItemStack] = []
 @export var prodTime: float = 1
 @export var skilledWorkerBonus: float = 0
 
