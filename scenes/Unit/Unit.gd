@@ -20,18 +20,45 @@ var taskPos
 var path: Array[Vector2]
 var pos: Vector2
 
+var chunk_loader: ChunkLoader = null
+var world: World = null
+var _pinned_chunk: Vector2i = Vector2i(-99999, -99999)
+
 func _ready():
 	pos = grid.worldToGrid(position)
 	unitSelected.connect(gui.setSelectedObject)
-	
+
 var time_elapsed := 0.0
 
 func _process(delta):
 	time_elapsed += delta
 	move(delta)
+	_update_chunk_pin()
 	if time_elapsed >= data.taskSpeed / TASK_TICKS_PER_SECOND:
 		time_elapsed = 0.0
 		doTask()
+
+func setup(loader: ChunkLoader, w: World, start_tile: Vector2) -> void:
+	chunk_loader = loader
+	world = w
+	position = grid.gridToWorld(start_tile)
+	pos = start_tile
+	_update_chunk_pin()
+
+func _update_chunk_pin() -> void:
+	if chunk_loader == null or world == null:
+		return
+	var new_chunk: Vector2i = world.chunk_of_tile(pos)
+	if new_chunk == _pinned_chunk:
+		return
+	if _pinned_chunk != Vector2i(-99999, -99999):
+		chunk_loader.unpin(_pinned_chunk)
+	chunk_loader.pin(new_chunk)
+	_pinned_chunk = new_chunk
+
+func _exit_tree():
+	if chunk_loader != null and _pinned_chunk != Vector2i(-99999, -99999):
+		chunk_loader.unpin(_pinned_chunk)
 	
 func doTask():
 	if currentTask == null:

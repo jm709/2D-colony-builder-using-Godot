@@ -27,6 +27,11 @@ func _ready():
 	_center_camera_on_spawn()
 	camera.setup(chunk_loader, world, grid)
 
+	var spawn_tile := world.spawn_tile()
+	for unit in $Grid/Units.get_children():
+		if unit is Unit:
+			unit.setup(chunk_loader, world, spawn_tile)
+
 func _load_or_create_world() -> World:
 	var world_path := "user://saves/%s/world.res" % DEFAULT_WORLD_NAME
 	if ResourceLoader.exists(world_path):
