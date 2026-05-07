@@ -6,6 +6,7 @@ const DEFAULT_CHUNK_SIZE := 64
 
 @onready var grid: Grid = $Grid
 @onready var gui = get_node("CanvasLayer/GUI")
+@onready var camera: Camera2D = $Camera
 
 var world: World
 var chunk_loader: ChunkLoader
@@ -24,6 +25,7 @@ func _ready():
 	chunk_loader.chunk_unloaded.connect(grid.path._on_chunk_unloaded)
 
 	_pin_spawn_area()
+	_center_camera_on_spawn()
 
 func _load_or_create_world() -> World:
 	var world_path := "user://saves/%s/world.res" % DEFAULT_WORLD_NAME
@@ -42,6 +44,14 @@ func _pin_spawn_area() -> void:
 	for dy in range(-1, 2):
 		for dx in range(-1, 2):
 			chunk_loader.pin(spawn + Vector2i(dx, dy))
+
+func _center_camera_on_spawn() -> void:
+	var spawn := world.spawn_chunk()
+	var center_tile := Vector2(
+		spawn.x * world.chunk_size + world.chunk_size / 2.0,
+		spawn.y * world.chunk_size + world.chunk_size / 2.0
+	)
+	camera.position = grid.gridToWorld(center_tile)
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
