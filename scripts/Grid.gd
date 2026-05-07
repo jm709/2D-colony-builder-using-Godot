@@ -11,65 +11,12 @@ var grid: Dictionary = {}
 
 @onready var findX : Dictionary = {}
 
-var moisture = FastNoiseLite.new()
-var temperature = FastNoiseLite.new()
-var altitude =  FastNoiseLite.new()
-
-# chunk dimensions in number of tiles
-var chunk_x = 128 
-var chunk_y = 128
+@export var show_debug: bool = false
 
 signal unitSelected(obj)
 
 func _ready():
 	unitSelected.connect(gui.setSelectedObject)
-
-func _initializeNoise():
-	moisture.seed = randi()
-	temperature.seed = randi()
-	altitude.seed = randi()
-
-@export var show_debug: bool = false
-
-func generateChunk():
-	var tile_pos = worldToGrid(Vector2(0,0))
-	for x in range(chunk_x):
-		for y in range(chunk_y):
-			grid[Vector2(x,y)] = CellData.new(Vector2(x,y))
-			
-			var world_x = tile_pos.x - chunk_x / 2 + x
-			var world_y = tile_pos.y - chunk_y / 2 + y
-			
-			var moist = moisture.get_noise_2d(world_x, world_y) * 10
-			var temp = temperature.get_noise_2d(world_x, world_y) * 10
-			var alt = altitude.get_noise_2d(world_x, world_y) * 10
-			
-			if alt < 1:
-				grid[Vector2(x,y)].floorData = preload("res://data/floor/deepwater.tres")
-			elif alt < 2:
-				grid[Vector2(x,y)].floorData = preload("res://data/floor/shallowwater.tres")
-			elif alt >= 2 and moist > 5:
-				grid[Vector2(x,y)].floorData = preload("res://data/floor/stonefloor_s.tres")
-			else:
-				if moist < 2:
-					grid[Vector2(x,y)].floorData = preload("res://data/floor/dirt.tres")
-				else:
-					grid[Vector2(x,y)].floorData = preload("res://data/floor/grass.tres")
-			grid[Vector2(x,y)].building = null
-			refreshTile(Vector2(x,y))
-			if show_debug:
-				var rect = ReferenceRect.new()
-				rect.position = gridToWorld(Vector2(x,y))
-				rect.size = Vector2(cell_size, cell_size)
-				rect.editor_only = false
-				$Debug.add_child(rect)
-				var label = Label.new()
-				label.position = gridToWorld(Vector2(x,y))
-				label.text = str(Vector2(x,y))
-				$Debug.add_child(label)
-
-
-
 
 func gridToWorld(_pos: Vector2) -> Vector2:
 	return _pos * cell_size
@@ -78,7 +25,7 @@ func worldToGrid(_pos: Vector2) -> Vector2:
 	return floor(_pos / cell_size)
 	
 func getTileFromGrid(_pos: Vector2):
-	return grid[Vector2(_pos.x,_pos.y)]
+	return grid.get(Vector2(_pos.x, _pos.y), null)
 	
 func updateTile(_pos: Vector2, _object) -> void:
 	var is_item = _object is ItemStack
@@ -123,6 +70,40 @@ func addFindable(_pos: Vector2, thing):
 		findX[str(thing)].append(_pos)
 	else:
 		findX[str(thing)] = [_pos]
-	
+
 func rmvFindable(_pos: Vector2, thing):
 	findX[str(thing)].erase(_pos)
+
+func _on_chunk_loaded(_coord: Vector2i, chunk: Chunk) -> void:
+	for local_y in range(chunk.chunk_size):
+		for local_x in range(chunk.chunk_size):
+			var local := Vector2i(local_x, local_y)
+			var global_pos := chunk.global_pos_for(local)
+			var tile: CellData = chunk.tile_at(local)
+			grid[global_pos] = tile
+			refreshTile(global_pos)
+			var building = tile.building
+			if building == null:
+				continue
+			if building is ItemStack:
+				addFindable(global_pos, str(building.id))
+				itemOverlay.set_stack(global_pos, building.CurrentAmount, gridToWorld(global_pos))
+			else:
+				addFindable(global_pos, building.get_class())
+
+func _on_chunk_unloaded(_coord: Vector2i, chunk: Chunk) -> void:
+	for local_y in range(chunk.chunk_size):
+		for local_x in range(chunk.chunk_size):
+			var local := Vector2i(local_x, local_y)
+			var global_pos := chunk.global_pos_for(local)
+			var tile: CellData = chunk.tile_at(local)
+			set_cell(0, global_pos)
+			set_cell(1, global_pos)
+			var building = tile.building
+			if building != null:
+				if building is ItemStack:
+					rmvFindable(global_pos, str(building.id))
+					itemOverlay.set_stack(global_pos, 0, gridToWorld(global_pos))
+				else:
+					rmvFindable(global_pos, building.get_class())
+			grid.erase(global_pos)
