@@ -24,6 +24,8 @@ var chunk_loader: ChunkLoader = null
 var world: World = null
 var _pinned_chunk: Vector2i
 var _has_pin: bool = false
+var _task_pinned_chunk: Vector2i
+var _task_has_pin: bool = false
 
 func _ready():
 	pos = grid.worldToGrid(position)
@@ -61,7 +63,28 @@ func _update_chunk_pin() -> void:
 func _exit_tree():
 	if chunk_loader != null and _has_pin:
 		chunk_loader.unpin(_pinned_chunk)
-	
+	if chunk_loader != null and _task_has_pin:
+		chunk_loader.unpin(_task_pinned_chunk)
+		_task_has_pin = false
+
+func _clear_task() -> void:
+	currentTask = null
+	if _task_has_pin:
+		chunk_loader.unpin(_task_pinned_chunk)
+		_task_has_pin = false
+
+func _pin_task_target(target: Vector2) -> void:
+	if chunk_loader == null or world == null:
+		return
+	var task_chunk: Vector2i = world.chunk_of_tile(target)
+	if _task_has_pin and _task_pinned_chunk == task_chunk:
+		return
+	if _task_has_pin:
+		chunk_loader.unpin(_task_pinned_chunk)
+	chunk_loader.pin(task_chunk)
+	_task_pinned_chunk = task_chunk
+	_task_has_pin = true
+
 func doTask():
 	if currentTask == null:
 		getTask()
@@ -90,7 +113,7 @@ func storeinv():
 				itemcata.CurrentAmount = itemcata.TotalAmount
 				data.hauling.CurrentAmount -= difference
 				break
-	currentTask = null
+	_clear_task()
 
 func nextTo(thepos):
 	var distance = (abs(thepos - pos))
@@ -105,7 +128,7 @@ func breakbuilding():
 		var drop : ItemStack = ItemStack.new(data_.item, data_.CurrentAmount)
 		grid.removeBuilding(taskPos)
 		grid.updateTile(taskPos, drop)
-		currentTask = null
+		_clear_task()
 
 func pickUp(_pos):
 	if (data.hauling == null or data.hauling.id == grid.grid[_pos].building.id):
@@ -167,13 +190,15 @@ func get_class():
 	return "Unit"
 	
 func set_task(task_, taskpos_):
+	_clear_task()
 	currentTask = task_
 	taskPos = taskpos_
+	_pin_task_target(taskpos_)
 	for x in pf.getPartialPath(pos, taskPos):
 		path.append(grid.worldToGrid(x))
 
 func setMoveTarget(thepos):
-	currentTask = null
+	_clear_task()
 	taskPos = null
 	for x in pf.getPath(pos, thepos):
 		path.append(grid.worldToGrid(x))
