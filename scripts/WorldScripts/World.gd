@@ -31,4 +31,4 @@ func spawn_chunk() -> Vector2i:
 	return Vector2i(size.x / 2, size.y / 2)
 
 func spawn_tile() -> Vector2:
-	return Vector2(spawn_chunk().x * chunk_size + chunk_size / 2, spawn_chunk().y * chunk_size + chunk_size / 2)
+	return Vector2(spawn_chunk().x * chunk_size + chunk_size / 2.0, spawn_chunk().y * chunk_size + chunk_size / 2.0)

@@ -22,7 +22,8 @@ var pos: Vector2
 
 var chunk_loader: ChunkLoader = null
 var world: World = null
-var _pinned_chunk: Vector2i = Vector2i(-99999, -99999)
+var _pinned_chunk: Vector2i
+var _has_pin: bool = false
 
 func _ready():
 	pos = grid.worldToGrid(position)
@@ -51,13 +52,14 @@ func _update_chunk_pin() -> void:
 	var new_chunk: Vector2i = world.chunk_of_tile(pos)
 	if new_chunk == _pinned_chunk:
 		return
-	if _pinned_chunk != Vector2i(-99999, -99999):
+	if _has_pin:
 		chunk_loader.unpin(_pinned_chunk)
 	chunk_loader.pin(new_chunk)
 	_pinned_chunk = new_chunk
+	_has_pin = true
 
 func _exit_tree():
-	if chunk_loader != null and _pinned_chunk != Vector2i(-99999, -99999):
+	if chunk_loader != null and _has_pin:
 		chunk_loader.unpin(_pinned_chunk)
 	
 func doTask():
