@@ -46,3 +46,17 @@ func get_tiles_with_tag(tag: StringName) -> Array:
 		var hits: Array = _by_chunk[chunk].get(tag, [])
 		out.append_array(hits)
 	return out
+
+func _on_chunk_loaded(_coord: Vector2i, chunk: Chunk) -> void:
+	for local_y in range(chunk.chunk_size):
+		for local_x in range(chunk.chunk_size):
+			var local := Vector2i(local_x, local_y)
+			var tile: CellData = chunk.tile_at(local)
+			if tile.building == null:
+				continue
+			var global_pos := chunk.global_pos_for(local)
+			add(global_pos, EntityTags.tags_for(tile.building))
+
+func _on_chunk_unloaded(coord: Vector2i, _chunk: Chunk) -> void:
+	_by_chunk.erase(coord)
+	_tags_by_chunk.erase(coord)
