@@ -1,12 +1,47 @@
 extends Node2D
 
-@onready var grid = $Grid
+const DEFAULT_WORLD_NAME := "default"
+const DEFAULT_WORLD_SIZE := Vector2i(16, 16)
+const DEFAULT_CHUNK_SIZE := 64
+
+@onready var grid: Grid = $Grid
 @onready var gui = get_node("CanvasLayer/GUI")
 
+var world: World
+var chunk_loader: ChunkLoader
+
 func _ready():
-	grid._initializeNoise()
-	grid.generateChunk()
-	$Grid/Pathfinding.initialize()
+	world = _load_or_create_world()
+	chunk_loader = ChunkLoader.new()
+	chunk_loader.name = "ChunkLoader"
+	chunk_loader.world = world
+	add_child(chunk_loader)
+
+	# Pathfinder must add points before Grid inserts tiles + refreshes.
+	chunk_loader.chunk_loaded.connect(grid.path._on_chunk_loaded)
+	chunk_loader.chunk_loaded.connect(grid._on_chunk_loaded)
+	chunk_loader.chunk_unloaded.connect(grid._on_chunk_unloaded)
+	chunk_loader.chunk_unloaded.connect(grid.path._on_chunk_unloaded)
+
+	_pin_spawn_area()
+
+func _load_or_create_world() -> World:
+	var world_path := "user://saves/%s/world.res" % DEFAULT_WORLD_NAME
+	if ResourceLoader.exists(world_path):
+		return ResourceLoader.load(world_path) as World
+	var w := World.new()
+	w.world_name = DEFAULT_WORLD_NAME
+	w.size = DEFAULT_WORLD_SIZE
+	w.chunk_size = DEFAULT_CHUNK_SIZE
+	w.world_seed = randi()
+	WorldGenerator.generate_world(w)
+	return w
+
+func _pin_spawn_area() -> void:
+	var spawn := world.spawn_chunk()
+	for dy in range(-1, 2):
+		for dx in range(-1, 2):
+			chunk_loader.pin(spawn + Vector2i(dx, dy))
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT:
@@ -22,4 +57,3 @@ func _unhandled_input(event: InputEvent):
 				gui.setSelectedObject(null)
 			else:
 				gui.setSelectedObject(tile)
-			
