@@ -11,6 +11,9 @@ var grid: Dictionary = {}
 
 @onready var findX : Dictionary = {}
 
+var chunk_loader: ChunkLoader = null
+var world: World = null
+
 @export var show_debug: bool = false
 
 signal unitSelected(obj)
@@ -39,6 +42,8 @@ func updateTile(_pos: Vector2, _object) -> void:
 		grid[_pos].navigable = _object.navigable
 		addFindable(_pos, _object.get_class())
 	refreshTile(_pos)
+	if chunk_loader != null:
+		chunk_loader.mark_dirty(_pos)
 
 func removeBuilding(_pos):
 	var building = grid[_pos].building
@@ -50,6 +55,8 @@ func removeBuilding(_pos):
 		key = building.get_class()
 	rmvFindable(_pos, str(key))
 	grid[_pos].building = null
+	if chunk_loader != null:
+		chunk_loader.mark_dirty(_pos)
 
 func refreshTile(_pos: Vector2) -> void:
 	var data = grid[_pos]

@@ -12,11 +12,14 @@ var world: World
 var chunk_loader: ChunkLoader
 
 func _ready():
+	get_tree().set_auto_accept_quit(false)
 	world = _load_or_create_world()
 	chunk_loader = ChunkLoader.new()
 	chunk_loader.name = "ChunkLoader"
 	chunk_loader.world = world
 	add_child(chunk_loader)
+	grid.chunk_loader = chunk_loader
+	grid.world = world
 
 	# Pathfinder must add points before Grid inserts tiles + refreshes.
 	chunk_loader.chunk_loaded.connect(grid.path._on_chunk_loaded)
@@ -31,6 +34,12 @@ func _ready():
 	for unit in $Grid/Units.get_children():
 		if unit is Unit:
 			unit.setup(chunk_loader, world, spawn_tile)
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if chunk_loader != null:
+			chunk_loader.save_dirty()
+		get_tree().quit()
 
 func _load_or_create_world() -> World:
 	var world_path := "user://saves/%s/world.res" % DEFAULT_WORLD_NAME
