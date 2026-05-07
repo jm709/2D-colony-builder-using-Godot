@@ -52,7 +52,7 @@ func _load(coord: Vector2i) -> void:
 		push_error("ChunkLoader: missing chunk file %s" % path)
 		_refcounts.erase(coord)
 		return
-	var chunk: Chunk = ResourceLoader.load(path, "Chunk", ResourceLoader.CACHE_MODE_IGNORE) as Chunk
+	var chunk: Chunk = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as Chunk
 	if chunk == null:
 		push_error("ChunkLoader: failed to load chunk %s" % path)
 		_refcounts.erase(coord)
